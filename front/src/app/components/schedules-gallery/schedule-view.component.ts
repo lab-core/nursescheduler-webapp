@@ -1,28 +1,41 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Solution } from 'src/app/models/Schedule';
-import { ProfileService } from 'src/app/services/profile/profile.service';
-import { ScheduleService } from 'src/app/services/schedule/schedule-service.service';
-import { ErrorMessageDialogComponent } from '../error-message-dialog/error-message-dialog.component';
-import { saveAs } from 'file-saver';
-import { CacheUtils } from 'src/app/utils/CacheUtils';
-import { Router } from '@angular/router';
-import { CONSULT_SCHEDULE, SCHEDULE_GENERATION } from 'src/app/constants/app-routes';
-import { NOTIFICATION_UPDATE } from 'src/app/constants/socket-events';
+import { HttpErrorResponse, HttpStatusCode } from "@angular/common/http";
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { Solution } from "src/app/models/Schedule";
+import { ProfileService } from "src/app/services/profile/profile.service";
+import { ScheduleService } from "src/app/services/schedule/schedule-service.service";
+import { ErrorMessageDialogComponent } from "../error-message-dialog/error-message-dialog.component";
+import { saveAs } from "file-saver";
+import { CacheUtils } from "src/app/utils/CacheUtils";
+import { Router } from "@angular/router";
+import {
+  CONSULT_SCHEDULE,
+  SCHEDULE_GENERATION,
+} from "src/app/constants/app-routes";
+import { NOTIFICATION_UPDATE } from "src/app/constants/socket-events";
 import { IN_PROGRESS, WAITING } from "src/app/constants/schedule_states";
 import { ContinuousVisualisationInterface } from "src/app/models/Schedule";
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from "../confirmation-dialog/confirmation-dialog.component";
 
 @Component({
-    selector: 'app-schedule-view',
-    templateUrl: './schedule-view.component.html',
-    styleUrls: ['./schedule-view.component.css'],
-    standalone: false
+  selector: "app-schedule-view",
+  templateUrl: "./schedule-view.component.html",
+  styleUrls: ["./schedule-view.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class SchedulesGalleryComponent implements OnInit, OnDestroy, AfterViewInit{
+export class SchedulesGalleryComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   connectedUser: boolean;
   schedules: Solution[];
   displayedColumns: string[];
@@ -32,22 +45,32 @@ export class SchedulesGalleryComponent implements OnInit, OnDestroy, AfterViewIn
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private service: ScheduleService,
-     private dialog: MatDialog, private profileService: ProfileService,
-     private router: Router){
+  constructor(
+    private service: ScheduleService,
+    private dialog: MatDialog,
+    private profileService: ProfileService,
+    private router: Router
+  ) {
     this.connectedUser = false;
-    this.schedules = []
-    this.displayedColumns = ["CreationDate","startDate", "endDate", "versionNumber", "state", "actions"]
+    this.schedules = [];
+    this.displayedColumns = [
+      "CreationDate",
+      "startDate",
+      "endDate",
+      "versionNumber",
+      "state",
+      "actions",
+    ];
     this.dataSource = new MatTableDataSource();
     this.alived = true;
-    this.fileName = ''
+    this.fileName = "";
   }
 
   ngOnInit(): void {
-    try{
+    try {
       this.getSchedules();
       this.connectedUser = true;
-    } catch(err) {
+    } catch (err) {
       this.connectedUser = false;
     }
   }
@@ -57,14 +80,14 @@ export class SchedulesGalleryComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    const profS = this.profileService.profileChanged.subscribe(()=>{
-      if(this.alived) {
+    const profS = this.profileService.profileChanged.subscribe(() => {
+      if (this.alived) {
         this.getSchedules();
       } else {
         profS.unsubscribe();
       }
-    })
-    this.setPaginator()
+    });
+    this.setPaginator();
   }
 
   setPaginator() {
@@ -72,37 +95,37 @@ export class SchedulesGalleryComponent implements OnInit, OnDestroy, AfterViewIn
       this.dataSource.paginator = this.paginator;
     } else {
       setTimeout(() => {
-        this.dataSource.paginator = this.paginator
+        this.dataSource.paginator = this.paginator;
       });
     }
   }
 
-  getSchedules(){
+  getSchedules() {
     this.service.getAllSolutions().subscribe({
-      next: (schedules: Solution[])=> {
+      next: (schedules: Solution[]) => {
         this.schedules = schedules.reverse();
-        this.dataSource.data= schedules;
-        this.setPaginator()
-        for(const sol of schedules) {
+        this.dataSource.data = schedules;
+        this.setPaginator();
+        for (const sol of schedules) {
           const subscription: ContinuousVisualisationInterface = {
             startDate: sol.startDate,
             endDate: sol.endDate,
             profile: sol.profile,
-            version: sol.version
-          }
-          if(sol.state === WAITING || sol.state === IN_PROGRESS) {
+            version: sol.version,
+          };
+          if (sol.state === WAITING || sol.state === IN_PROGRESS) {
             this.service.notificationSubscribe(sol);
           } else {
             this.service.notificationUnsubscribe(sol);
           }
         }
       },
-      error: (err: HttpErrorResponse)=> {
-        this.openErrorDialog(err.error)
-      }
-    })
-    this.service.socket.once(NOTIFICATION_UPDATE, (data: any)=>{
-      if(this.alived) {
+      error: (err: HttpErrorResponse) => {
+        this.openErrorDialog(err.error);
+      },
+    });
+    this.service.socket.once(NOTIFICATION_UPDATE, (data: any) => {
+      if (this.alived) {
         this.getSchedules();
       }
     });
@@ -110,58 +133,71 @@ export class SchedulesGalleryComponent implements OnInit, OnDestroy, AfterViewIn
 
   openErrorDialog(message: string) {
     this.dialog.open(ErrorMessageDialogComponent, {
-      height: '45%',
-      width: '45%',
-      position: {top:'20vh',left: '30%', right: '25%'},
-      data: {message: message}
-    })
+      height: "45%",
+      width: "45%",
+      position: { top: "20vh", left: "30%", right: "25%" },
+      data: { message: message },
+    });
   }
 
-  viewSchedule(schedule: Solution, imported: boolean = false){
+  viewSchedule(schedule: Solution, imported: boolean = false) {
     this.service.selectedScheduleToView = schedule;
     this.service.importedScheduleToView = imported;
-    this.router.navigate(["/"+ CONSULT_SCHEDULE])
+    this.router.navigate(["/" + CONSULT_SCHEDULE]);
   }
 
   exportProblem(schedule: Solution) {
     this.service.exportProblemSchedule(schedule, "txt").subscribe({
-      next: (data: {content: string})=>{
-        const file = new File([data.content], CacheUtils.getProfile() + "_" + schedule.startDate + "_" + schedule.endDate + "_" + schedule.version + ".txt", {type:"text/plain;charset=utf-8"});
+      next: (data: { content: string }) => {
+        const file = new File(
+          [data.content],
+          CacheUtils.getProfile() +
+            "_" +
+            schedule.startDate +
+            "_" +
+            schedule.endDate +
+            "_" +
+            schedule.version +
+            ".txt",
+          { type: "text/plain;charset=utf-8" }
+        );
         saveAs(file);
-      }
-    })
+      },
+    });
   }
 
-  removeSolution(sol: Solution){
-    try{
-      const dialog = this.dialog.open(ConfirmationDialogComponent,
-        { disableClose: true,
-          height: '50%',
-          width: '28%',
-          position: {top:'20vh',left: '38%', right: '25%'},
-          data: {message: "contract", elementName:sol.startDate+ "-" + sol.endDate + "-" + sol.version}
-        });
-      dialog.afterClosed().subscribe((result: boolean)=>{
-        if(result){
+  removeSolution(sol: Solution) {
+    try {
+      const dialog = this.dialog.open(ConfirmationDialogComponent, {
+        disableClose: true,
+        height: "50%",
+        width: "28%",
+        position: { top: "20vh", left: "38%", right: "25%" },
+        data: {
+          message: "contract",
+          elementName: sol.startDate + "-" + sol.endDate + "-" + sol.version,
+        },
+      });
+      dialog.afterClosed().subscribe((result: boolean) => {
+        if (result) {
           this.service.removeSolution(sol).subscribe({
-            error: (err: HttpErrorResponse)=>{
-              if(err.status === HttpStatusCode.Ok){
-                this.getSchedules()
+            error: (err: HttpErrorResponse) => {
+              if (err.status === HttpStatusCode.Ok) {
+                this.getSchedules();
+              } else {
+                this.openErrorDialog(err.error);
               }
-              else{
-                this.openErrorDialog(err.error)
-              }
-            }
-          })
+            },
+          });
         }
-      })
-    } catch(err){
+      });
+    } catch (err) {
       // Do nothing
     }
   }
 
-  generateNewSchedule(){
-    this.router.navigate(["/" + SCHEDULE_GENERATION])
+  generateNewSchedule() {
+    this.router.navigate(["/" + SCHEDULE_GENERATION]);
   }
 
   applyFilter(event: Event) {
@@ -173,18 +209,18 @@ export class SchedulesGalleryComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  onFileSelected(event:any){
+  onFileSelected(event: any) {
     const file: File = event.target.files[0];
     this.fileName = file.name;
     this.service.importSolution(file).subscribe({
-      next: (sol: Solution)=> {
-        this.viewSchedule(sol, true)
+      next: (sol: Solution) => {
+        this.viewSchedule(sol, true);
       },
-      error: (err: HttpErrorResponse)=>{
-        if(err.status !== HttpStatusCode.Ok){
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== HttpStatusCode.Ok) {
           this.openErrorDialog(err.error);
         }
-      }
-    })
+      },
+    });
   }
 }

@@ -1,27 +1,33 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { SkillInterface } from 'src/app/models/skill';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { FormControl, Validators } from "@angular/forms";
+import { SkillInterface } from "src/app/models/skill";
 
 @Component({
-    selector: 'app-skill-creation',
-    templateUrl: './skill-creation.component.html',
-    styleUrls: ['./skill-creation.component.css'],
-    standalone: false
+  selector: "app-skill-creation",
+  templateUrl: "./skill-creation.component.html",
+  styleUrls: ["./skill-creation.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class SkillCreationComponent implements OnInit {
   @Input() skill!: SkillInterface;
   @Output() skillChange: EventEmitter<SkillInterface>;
   @Output() errorState: EventEmitter<boolean>;
-  @Input() skills!: string[]
+  @Input() skills!: string[];
   @Input() imported: boolean;
-
 
   nameSkillFormCtrl: FormControl;
   inputDisabled: boolean;
-  skillStartName!: string
+  skillStartName!: string;
 
-
-  constructor(){
+  constructor() {
     this.skillChange = new EventEmitter();
     this.errorState = new EventEmitter();
     this.imported = false;
@@ -31,37 +37,39 @@ export class SkillCreationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.skill.name = this.skill.name.replace(/[^a-zA-Z0-9]/, '')
-    this.inputDisabled = this.skill.name === "" || this.imported? false: true;
+    this.skill.name = this.skill.name.replace(/[^a-zA-Z0-9]/, "");
+    this.inputDisabled = this.skill.name === "" || this.imported ? false : true;
     this.skillStartName = this.skill.name;
-    console.log(this.skill.name)
-    this.nameSkillFormCtrl = new FormControl({value: this.skill.name, disabled: this.inputDisabled},
-      Validators.required);
-    this.emitSkill()
-
+    console.log(this.skill.name);
+    this.nameSkillFormCtrl = new FormControl(
+      { value: this.skill.name, disabled: this.inputDisabled },
+      Validators.required
+    );
+    this.emitSkill();
   }
 
-  emitSkill(){
+  emitSkill() {
     this.skillChange.emit(this.skill);
     this.emitErrorState();
   }
 
   emitErrorState() {
     console.log(this.skillStartName);
-    this.errorState.emit(this.nameSkillFormCtrl.hasError('required') || (this.nameExist() && this.skillStartName == "") );
+    this.errorState.emit(
+      this.nameSkillFormCtrl.hasError("required") ||
+        (this.nameExist() && this.skillStartName == "")
+    );
     console.log("error");
   }
 
   nameExist(): boolean {
-    const temp = [...this.skills]
-    if(this.imported){
-      const index = temp.indexOf(this.skill.name)
-      if(index > -1){
+    const temp = [...this.skills];
+    if (this.imported) {
+      const index = temp.indexOf(this.skill.name);
+      if (index > -1) {
         temp.splice(index, 1);
       }
     }
     return temp.includes(this.skill.name);
   }
-
-
 }

@@ -1,94 +1,102 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, } from '@angular/material/paginator';
-import { Contract, ContractInterface } from 'src/app/models/Contract';
+import { HttpErrorResponse, HttpStatusCode } from "@angular/common/http";
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { Contract, ContractInterface } from "src/app/models/Contract";
 //import { APIService } from 'src/app/services/api-service/api.service';
-import { ProfileService } from 'src/app/services/profile/profile.service';
-import { ContractService } from 'src/app/services/contract/contract.service';
-import { ContractCreationDialogComponent } from '../contract-creation-dialog/contract-creation-dialog.component';
-import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-message-dialog.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
+import { ProfileService } from "src/app/services/profile/profile.service";
+import { ContractService } from "src/app/services/contract/contract.service";
+import { ContractCreationDialogComponent } from "../contract-creation-dialog/contract-creation-dialog.component";
+import { ErrorMessageDialogComponent } from "../../error-message-dialog/error-message-dialog.component";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatSort } from "@angular/material/sort";
+import { ConfirmationDialogComponent } from "../../confirmation-dialog/confirmation-dialog.component";
 
 @Component({
-    selector: 'app-contracts-view',
-    templateUrl: './contracts-view.component.html',
-    styleUrls: ['./contracts-view.component.css'],
-    standalone: false
+  selector: "app-contracts-view",
+  templateUrl: "./contracts-view.component.html",
+  styleUrls: ["./contracts-view.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class ContractsViewComponent implements OnInit, AfterViewInit{
-
+export class ContractsViewComponent implements OnInit, AfterViewInit {
   contracts: string[];
-  connectedUser!:boolean;
-  displayedColumns: string[]; 
+  connectedUser!: boolean;
+  displayedColumns: string[];
   dataSource: MatTableDataSource<ContractInterface>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog, private contractService: ContractService, private profileService: ProfileService,
-    private contarctService: ContractService) {
+  constructor(
+    private dialog: MatDialog,
+    private contractService: ContractService,
+    private profileService: ProfileService,
+    private contarctService: ContractService
+  ) {
     this.contracts = [];
     this.dataSource = new MatTableDataSource();
-    this.displayedColumns =  ['name','actions'];
+    this.displayedColumns = ["name", "actions"];
   }
 
   ngOnInit(): void {
-    try{
+    try {
       this.getContracts();
       this.connectedUser = true;
-    }catch(err){
+    } catch (err) {
       this.connectedUser = false;
     }
   }
 
   ngAfterViewInit(): void {
-    this.profileService.profileChanged.subscribe(()=>{
+    this.profileService.profileChanged.subscribe(() => {
       this.getContracts();
-    })
+    });
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  
-  getContracts(){
+
+  getContracts() {
     this.contractService.getContractNames().subscribe({
-      next: (contracts: string[])=> {
+      next: (contracts: string[]) => {
         this.contracts = contracts;
-  
       },
-      error: (error: HttpErrorResponse)=> {
+      error: (error: HttpErrorResponse) => {
         this.openErrorDialog(error.error);
-      }
-    })
+      },
+    });
     this.contractService.getContracts().subscribe({
-      next: (contracts: ContractInterface[])=> {
+      next: (contracts: ContractInterface[]) => {
         this.dataSource.data = contracts;
-  
       },
-      error: (error: HttpErrorResponse)=> {
+      error: (error: HttpErrorResponse) => {
         this.openErrorDialog(error.error);
-      }
-    })
+      },
+    });
   }
 
-  openContractCreationDialog(contract: Contract){
-    const dialog = this.dialog.open(ContractCreationDialogComponent,
-      {data: {contract: contract, contractList: this.contracts},
-   })
-   dialog.afterClosed().subscribe(()=>{
-    this.getContracts()
-   })
+  openContractCreationDialog(contract: Contract) {
+    const dialog = this.dialog.open(ContractCreationDialogComponent, {
+      data: { contract: contract, contractList: this.contracts },
+    });
+    dialog.afterClosed().subscribe(() => {
+      this.getContracts();
+    });
   }
 
   openErrorDialog(message: string) {
     this.dialog.open(ErrorMessageDialogComponent, {
-      height: '45%',
-      width: '45%', 
-      position: {top:'20vh',left: '30%', right: '25%'},
-      data: {message: message},
-    })
+      height: "45%",
+      width: "45%",
+      position: { top: "20vh", left: "30%", right: "25%" },
+      data: { message: message },
+    });
   }
 
   createNewContract() {
@@ -98,41 +106,39 @@ export class ContractsViewComponent implements OnInit, AfterViewInit{
 
   modifyContract(name: string) {
     this.contractService.getContractByName(name).subscribe({
-      next:(contractJson: ContractInterface) =>{
+      next: (contractJson: ContractInterface) => {
         const contract: Contract = this.contarctService.fromJson(contractJson);
         this.openContractCreationDialog(contract);
       },
-      error: (error: HttpErrorResponse)=>{
+      error: (error: HttpErrorResponse) => {
         this.openErrorDialog(error.error);
-      }
-    })
+      },
+    });
   }
 
-
-  deleteContract(contract:string){
-    try{
-      const dialog = this.dialog.open(ConfirmationDialogComponent,  
-        { disableClose: true,  
-          height: '50%',
-          width: '28%', 
-          position: {top:'20vh',left: '38%', right: '25%'},
-          data: {message: "contract", elementName:contract}
-        });
-      dialog.afterClosed().subscribe((result: boolean)=>{
-        if(result){
+  deleteContract(contract: string) {
+    try {
+      const dialog = this.dialog.open(ConfirmationDialogComponent, {
+        disableClose: true,
+        height: "50%",
+        width: "28%",
+        position: { top: "20vh", left: "38%", right: "25%" },
+        data: { message: "contract", elementName: contract },
+      });
+      dialog.afterClosed().subscribe((result: boolean) => {
+        if (result) {
           this.contractService.deleteContract(contract).subscribe({
-            error:(error: HttpErrorResponse)=>{
-              if(error.status === HttpStatusCode.Ok){
+            error: (error: HttpErrorResponse) => {
+              if (error.status === HttpStatusCode.Ok) {
                 this.getContracts();
-              }
-              else {
+              } else {
                 this.openErrorDialog(error.error);
               }
-            }
-          })
+            },
+          });
         }
-      })
-    } catch(err){
+      });
+    } catch (err) {
       // Do nothing
     }
   }

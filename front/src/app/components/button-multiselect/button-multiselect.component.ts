@@ -1,11 +1,18 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { CustomSelector } from "src/app/models/CustomSelector";
 
 @Component({
-    selector: "app-button-multiselect",
-    templateUrl: "./button-multiselect.component.html",
-    styleUrls: ["./button-multiselect.component.css"],
-    standalone: false
+  selector: "app-button-multiselect",
+  templateUrl: "./button-multiselect.component.html",
+  styleUrls: ["./button-multiselect.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class ButtonMultiselectComponent {
   @Input() elements!: string[];
@@ -16,9 +23,9 @@ export class ButtonMultiselectComponent {
 
   @Output() selectionChanged!: EventEmitter<boolean>;
 
-  constructor(){
-    this.elementsChange = new EventEmitter<string[]>;
-    this.selectionChanged = new EventEmitter<boolean>;
+  constructor() {
+    this.elementsChange = new EventEmitter<string[]>();
+    this.selectionChanged = new EventEmitter<boolean>();
   }
 
   toggleElement(elementName: string) {
@@ -50,8 +57,8 @@ export class ButtonMultiselectComponent {
   isCustomSelectorActive(elements: string[]) {
     let areAllSelected = true;
 
-    for(const element of elements) {
-      if(!this.isSelected(element)) {
+    for (const element of elements) {
+      if (!this.isSelected(element)) {
         areAllSelected = false;
       }
     }
@@ -83,7 +90,7 @@ export class ButtonMultiselectComponent {
   }
 
   private fillElements(newElements: string[]) {
-    for(const element of newElements) {
+    for (const element of newElements) {
       this.elements.push(element);
     }
     this.elementsChange.emit(this.elements);
@@ -93,5 +100,4 @@ export class ButtonMultiselectComponent {
     this.elements.splice(0, this.elements.length);
     this.elementsChange.emit(this.elements);
   }
-
 }

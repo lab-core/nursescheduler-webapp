@@ -1,15 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { BASE_VALUE, WEIGHT_LABEL } from "src/app/constants/constraints";
 import { BOOLEAN_CONSTRAINT_DISCLAIMER } from "src/app/constants/constraintsDescriptions";
 import { BooleanConstraint } from "src/app/models/BooleanConstraint";
 
 @Component({
-    selector: "app-boolean-constraint",
-    templateUrl: "./boolean-constraint.component.html",
-    styleUrls: ["./boolean-constraint.component.css"],
-    standalone: false
+  selector: "app-boolean-constraint",
+  templateUrl: "./boolean-constraint.component.html",
+  styleUrls: ["./boolean-constraint.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class BooleanConstraintComponent implements OnInit{
+export class BooleanConstraintComponent implements OnInit {
   @Input() constraint!: BooleanConstraint;
   @Output() constraintChange: EventEmitter<BooleanConstraint>;
   @Output() errorState: EventEmitter<boolean>;
@@ -29,7 +37,7 @@ export class BooleanConstraintComponent implements OnInit{
 
   ngOnInit(): void {
     this.weightErrorState = this.constraint.weight === BASE_VALUE;
-    this.emitConstraint(); 
+    this.emitConstraint();
   }
 
   emitConstraint() {

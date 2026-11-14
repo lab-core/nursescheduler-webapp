@@ -1,21 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BASE_VALUE } from 'src/app/constants/constraints';
-import { SkillDemandInterface } from 'src/app/models/hospital-demand';
-
-
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { BASE_VALUE } from "src/app/constants/constraints";
+import { SkillDemandInterface } from "src/app/models/hospital-demand";
 
 @Component({
-    selector: 'app-min-max-hopspital-demand',
-    templateUrl: './min-max-hopspital-demand.component.html',
-    styleUrls: ['./min-max-hopspital-demand.component.css'],
-    standalone: false
+  selector: "app-min-max-hopspital-demand",
+  templateUrl: "./min-max-hopspital-demand.component.html",
+  styleUrls: ["./min-max-hopspital-demand.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class MinMaxHopspitalDemandComponent implements OnInit{
+export class MinMaxHopspitalDemandComponent implements OnInit {
   @Input() demand!: SkillDemandInterface;
   @Output() demandChange: EventEmitter<SkillDemandInterface>;
   @Output() errorState: EventEmitter<boolean>;
 
-  
   minValueErrorState: boolean;
   maxValueErrorState: boolean;
   maxWeightErrorState: boolean;
@@ -25,7 +30,6 @@ export class MinMaxHopspitalDemandComponent implements OnInit{
   minInputDisabled: boolean;
   maxInputDisabled: boolean;
 
-  
   constructor() {
     this.demandChange = new EventEmitter();
     this.errorState = new EventEmitter();
@@ -34,21 +38,25 @@ export class MinMaxHopspitalDemandComponent implements OnInit{
     this.maxWeightErrorState = true;
     this.minWeightErrorState = true;
     this.maxWeightLabel = " Max weight";
-    this.minWeightLabel = "Min weight"
-    this.minInputDisabled = false
+    this.minWeightLabel = "Min weight";
+    this.minInputDisabled = false;
     this.maxInputDisabled = false;
   }
 
   ngOnInit(): void {
-      this.minValueErrorState = this.demand.minValue === BASE_VALUE;
-      this.maxValueErrorState = this.demand.maxValue === BASE_VALUE;
-      this.maxWeightErrorState = this.demand.maxWeight === BASE_VALUE;
-      this.minWeightErrorState = this.demand.minWeight === BASE_VALUE;
+    this.minValueErrorState = this.demand.minValue === BASE_VALUE;
+    this.maxValueErrorState = this.demand.maxValue === BASE_VALUE;
+    this.maxWeightErrorState = this.demand.maxWeight === BASE_VALUE;
+    this.minWeightErrorState = this.demand.minWeight === BASE_VALUE;
   }
 
-  emitErrorState(){
-    this.errorState.emit(this.minValueErrorState || this.maxValueErrorState ||
-          this.minWeightErrorState || this.maxWeightErrorState) ;
+  emitErrorState() {
+    this.errorState.emit(
+      this.minValueErrorState ||
+        this.maxValueErrorState ||
+        this.minWeightErrorState ||
+        this.maxWeightErrorState
+    );
   }
 
   emitSkillDemand() {
@@ -58,17 +66,17 @@ export class MinMaxHopspitalDemandComponent implements OnInit{
 
   updateMinValueErrorState(e: boolean) {
     this.minValueErrorState = e;
-    if(+this.demand.minValue > +this.demand.maxValue){
-      this.demand.maxValue = this.demand.minValue
+    if (+this.demand.minValue > +this.demand.maxValue) {
+      this.demand.maxValue = this.demand.minValue;
     }
     this.emitSkillDemand();
   }
 
   updateMaxValueErrorState(e: boolean) {
     this.maxValueErrorState = e;
-    if(this.demand.maxValue !== ""){
-      if(+this.demand.minValue > +this.demand.maxValue) {
-        this.demand.minValue = this.demand.maxValue
+    if (this.demand.maxValue !== "") {
+      if (+this.demand.minValue > +this.demand.maxValue) {
+        this.demand.minValue = this.demand.maxValue;
       }
     }
     this.emitSkillDemand();
@@ -76,15 +84,13 @@ export class MinMaxHopspitalDemandComponent implements OnInit{
 
   updateMinWeightErrorState(e: boolean) {
     this.minWeightErrorState = e;
-    this.minInputDisabled = this.demand.minWeight === "0"
+    this.minInputDisabled = this.demand.minWeight === "0";
     this.emitSkillDemand();
   }
 
   updateMaxWeightErrorState(e: boolean) {
     this.maxWeightErrorState = e;
-    this.maxInputDisabled = this.demand.maxWeight === "0"
+    this.maxInputDisabled = this.demand.maxWeight === "0";
     this.emitSkillDemand();
   }
-
 }
-

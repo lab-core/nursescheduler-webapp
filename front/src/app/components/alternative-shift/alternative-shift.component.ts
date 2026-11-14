@@ -1,16 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { BASE_VALUE } from 'src/app/constants/constraints';
-import { AlternativeShift } from 'src/app/models/AlternativeShift';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { FormControl, Validators } from "@angular/forms";
+import { BASE_VALUE } from "src/app/constants/constraints";
+import { AlternativeShift } from "src/app/models/AlternativeShift";
 
 @Component({
-    selector: 'app-alternative-shift',
-    templateUrl: './alternative-shift.component.html',
-    styleUrls: ['./alternative-shift.component.css'],
-    standalone: false
+  selector: "app-alternative-shift",
+  templateUrl: "./alternative-shift.component.html",
+  styleUrls: ["./alternative-shift.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class AlternativeShiftComponent implements OnInit{
-
+export class AlternativeShiftComponent implements OnInit {
   @Input() constraint!: AlternativeShift;
   @Output() constraintChange: EventEmitter<AlternativeShift>;
   @Output() errorState: EventEmitter<boolean>;
@@ -19,22 +26,21 @@ export class AlternativeShiftComponent implements OnInit{
   shiftSelectorCtrl: FormControl;
   weightLabel: string;
 
-  constructor(){
+  constructor() {
     this.constraintChange = new EventEmitter();
     this.errorState = new EventEmitter();
     this.weightErrorState = true;
-    this.shiftSelectorCtrl =new FormControl(null, Validators.required);
+    this.shiftSelectorCtrl = new FormControl(null, Validators.required);
     this.weightLabel = "weight";
-    
   }
 
   ngOnInit(): void {
-    if(!this.possibleShifts.includes(this.constraint.shiftId)){
+    if (!this.possibleShifts.includes(this.constraint.shiftId)) {
       this.constraint.shiftId = "";
     }
     this.shiftSelectorCtrl.setValue(this.constraint.shiftId);
     this.weightErrorState = this.constraint.weight === BASE_VALUE;
-    this.emitConstraint();    
+    this.emitConstraint();
   }
 
   emitConstraint() {
@@ -43,7 +49,9 @@ export class AlternativeShiftComponent implements OnInit{
   }
 
   emitErrorState() {
-    this.errorState.emit(this.shiftSelectorCtrl.hasError('required') || this.weightErrorState);
+    this.errorState.emit(
+      this.shiftSelectorCtrl.hasError("required") || this.weightErrorState
+    );
   }
 
   updateWeightErrorState(e: boolean) {

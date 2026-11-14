@@ -1,14 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { BASE_VALUE } from "src/app/constants/constraints";
 import { IntegerConstraint } from "src/app/models/IntegerConstraint";
 
 @Component({
-    selector: "app-integer-constraint",
-    templateUrl: "./integer-constraint.component.html",
-    styleUrls: ["./integer-constraint.component.css"],
-    standalone: false
+  selector: "app-integer-constraint",
+  templateUrl: "./integer-constraint.component.html",
+  styleUrls: ["./integer-constraint.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class IntegerConstraintComponent implements OnInit{
+export class IntegerConstraintComponent implements OnInit {
   @Input() constraint!: IntegerConstraint;
   @Output() constraintChange: EventEmitter<IntegerConstraint>;
   @Output() errorState: EventEmitter<boolean>;

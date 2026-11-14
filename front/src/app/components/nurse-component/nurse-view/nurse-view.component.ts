@@ -1,9 +1,15 @@
 import { HttpErrorResponse, HttpStatusCode } from "@angular/common/http";
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 
 import { NurseInterface } from "src/app/models/Nurse";
 import { NurseService } from "src/app/services/nurse/nurse.service";
@@ -15,148 +21,157 @@ import { NurseCreationDialogComponent } from "../nurse-creation-dialog/nurse-cre
 import { ConfirmationDialogComponent } from "../../confirmation-dialog/confirmation-dialog.component";
 
 @Component({
-    selector: "app-nurse-view",
-    templateUrl: "./nurse-view.component.html",
-    styleUrls: ["./nurse-view.component.css"],
-    standalone: false
+  selector: "app-nurse-view",
+  templateUrl: "./nurse-view.component.html",
+  styleUrls: ["./nurse-view.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class NurseViewComponent implements OnInit, AfterViewInit{
-  
+export class NurseViewComponent implements OnInit, AfterViewInit {
   nurses_username: string[];
-  connectedUser!:boolean;
-  displayedColumns: string[]; 
+  connectedUser!: boolean;
+  displayedColumns: string[];
   dataSource: MatTableDataSource<NurseInterface>;
 
-  @ViewChild(MatPaginator, {static: false})
+  @ViewChild(MatPaginator, { static: false })
   set paginator(value: MatPaginator) {
-    if (this.dataSource){
+    if (this.dataSource) {
       this.dataSource.paginator = value;
     }
   }
-  @ViewChild(MatSort, {static: false})
+  @ViewChild(MatSort, { static: false })
   set sort(value: MatSort) {
-    if (this.dataSource){
+    if (this.dataSource) {
       this.dataSource.sort = value;
     }
   }
 
-  constructor(public dialog: MatDialog, private nurseService: NurseService, private profileService: ProfileService) {
+  constructor(
+    public dialog: MatDialog,
+    private nurseService: NurseService,
+    private profileService: ProfileService
+  ) {
     this.nurses_username = [];
-    this.displayedColumns =  ['name', 'username', 'contracts','contract_groups','actions'];
+    this.displayedColumns = [
+      "name",
+      "username",
+      "contracts",
+      "contract_groups",
+      "actions",
+    ];
     this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit(): void {
-    try{
+    try {
       this.getNurses();
       this.connectedUser = true;
-    }catch(err){
+    } catch (err) {
       this.connectedUser = false;
     }
   }
 
   ngAfterViewInit(): void {
-    this.profileService.profileChanged.subscribe(()=>{
+    this.profileService.profileChanged.subscribe(() => {
       this.getNurses();
-    })  
-
+    });
   }
 
-  getNurses(){
+  getNurses() {
     this.nurseService.getAllNurseUsername().subscribe({
-      next: (username: string[])=> {
+      next: (username: string[]) => {
         this.nurses_username = username;
       },
-      error: (error: HttpErrorResponse)=> {
+      error: (error: HttpErrorResponse) => {
         this.openErrorDialog(error.error);
-      }
-    })
+      },
+    });
     this.nurseService.getAllNurse().subscribe({
-      next: (nurse: NurseInterface[])=> {
+      next: (nurse: NurseInterface[]) => {
         this.dataSource.data = nurse;
       },
-      error: (error: HttpErrorResponse)=> {
+      error: (error: HttpErrorResponse) => {
         this.openErrorDialog(error.error);
-      }
-    })
+      },
+    });
   }
-
 
   openErrorDialog(message: string) {
     this.dialog.open(ErrorMessageDialogComponent, {
-      height: '45%',
-      width: '45%', 
-      position: {top:'20vh',left: '30%', right: '25%'},
-      data: {message: message},
-    })
+      height: "45%",
+      width: "45%",
+      position: { top: "20vh", left: "30%", right: "25%" },
+      data: { message: message },
+    });
   }
 
   openNurseCreationDialog(nurse: NurseInterface) {
-    const dialog = this.dialog.open(NurseCreationDialogComponent,  
-      { disableClose: true,  
-        height: '85%',
-        width: '55%', 
-        position: {top:'8vh',left: '25%', right: '25%'},
-        data: {nurse:nurse,nurses:this.nurses_username},
+    const dialog = this.dialog.open(NurseCreationDialogComponent, {
+      disableClose: true,
+      height: "85%",
+      width: "55%",
+      position: { top: "8vh", left: "25%", right: "25%" },
+      data: { nurse: nurse, nurses: this.nurses_username },
+    });
+
+    dialog.afterClosed().subscribe(() => {
+      this.getNurses();
+    });
+  }
+
+  createNewNurse() {
+    const newNnurse = {
+      name: "",
+      username: "",
+      contracts: [],
+      contract_groups: [],
+      profile: CacheUtils.getProfile(),
+    };
+    this.openNurseCreationDialog(newNnurse);
+  }
+
+  deleteNurse(nurseUsername: string) {
+    try {
+      const dialog = this.dialog.open(ConfirmationDialogComponent, {
+        disableClose: true,
+        height: "50%",
+        width: "28%",
+        position: { top: "20vh", left: "38%", right: "25%" },
+        data: { message: "nurse", elementName: nurseUsername },
       });
-    
-      dialog.afterClosed().subscribe(()=>{
-        this.getNurses();
-      })
-  }
-
-
-  createNewNurse(){
-    const newNnurse = {name: '',username: '', contracts:[], contract_groups:[], profile: CacheUtils.getProfile()};
-    this.openNurseCreationDialog(newNnurse); 
-  }
-
-
-  deleteNurse(nurseUsername: string){
-    try
-    { 
-      const dialog = this.dialog.open(ConfirmationDialogComponent,  
-        { disableClose: true,  
-          height: '50%',
-          width: '28%', 
-          position: {top:'20vh',left: '38%', right: '25%'},
-          data: {message: "nurse", elementName:nurseUsername}
-        });
-      dialog.afterClosed().subscribe((result: boolean)=>{
-        if(result){
+      dialog.afterClosed().subscribe((result: boolean) => {
+        if (result) {
           //call api service to push the contract
           this.nurseService.removeNurse(nurseUsername).subscribe({
-            error: (err: HttpErrorResponse)=> {
-              if(err.status === HttpStatusCode.Ok) {
+            error: (err: HttpErrorResponse) => {
+              if (err.status === HttpStatusCode.Ok) {
                 const index = this.nurses_username.indexOf(nurseUsername);
                 if (index > -1) {
                   this.nurses_username.splice(index, 1);
                   this.getNurses();
                 }
+              } else {
+                this.openErrorDialog(err.error);
               }
-              else{
-                this.openErrorDialog(err.error)
-              }
-            } 
-          })
+            },
+          });
         }
-      })
-    }
-    catch(e){
-      console.log("error")
-      this.openErrorDialog((e as Exception).getMessage())
+      });
+    } catch (e) {
+      console.log("error");
+      this.openErrorDialog((e as Exception).getMessage());
     }
   }
 
-  modifyNurse(nurse_username: string){
+  modifyNurse(nurse_username: string) {
     this.nurseService.getNurseByUserName(nurse_username).subscribe({
-      next:(nurse: NurseInterface) =>{
+      next: (nurse: NurseInterface) => {
         this.openNurseCreationDialog(nurse);
       },
-      error: (error: HttpErrorResponse)=>{
+      error: (error: HttpErrorResponse) => {
         this.openErrorDialog(error.error);
-      }
-    })
+      },
+    });
   }
 
   applyFilter(event: Event) {
@@ -167,6 +182,4 @@ export class NurseViewComponent implements OnInit, AfterViewInit{
       this.dataSource.paginator.firstPage();
     }
   }
-
-
 }

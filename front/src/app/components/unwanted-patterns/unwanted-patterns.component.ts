@@ -1,16 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BASE_VALUE } from 'src/app/constants/constraints';
-import { PatternElement } from 'src/app/models/PatternElement';
-import { UnwantedPatterns } from 'src/app/models/UnwantedPatterns';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { BASE_VALUE } from "src/app/constants/constraints";
+import { PatternElement } from "src/app/models/PatternElement";
+import { UnwantedPatterns } from "src/app/models/UnwantedPatterns";
 
 @Component({
-    selector: 'app-unwanted-patterns',
-    templateUrl: './unwanted-patterns.component.html',
-    styleUrls: ['./unwanted-patterns.component.css'],
-    standalone: false
+  selector: "app-unwanted-patterns",
+  templateUrl: "./unwanted-patterns.component.html",
+  styleUrls: ["./unwanted-patterns.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class UnwantedPatternsComponent implements OnInit {
-
   @Input() constraint!: UnwantedPatterns;
   @Output() constraintChange: EventEmitter<UnwantedPatterns>;
   patternErrors: boolean[];
@@ -29,11 +36,10 @@ export class UnwantedPatternsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    for(let i=0; i < this.constraint.patternElements.length; i++) {
-      if(this.constraint.patternElements[i].days.length === 0){
+    for (let i = 0; i < this.constraint.patternElements.length; i++) {
+      if (this.constraint.patternElements[i].days.length === 0) {
         this.patternErrors.push(true);
-      }
-      else{
+      } else {
         this.patternErrors.push(false);
       }
     }
@@ -47,9 +53,9 @@ export class UnwantedPatternsComponent implements OnInit {
     this.emitConstraint();
   }
 
-  removePattern(pattern:PatternElement) {
+  removePattern(pattern: PatternElement) {
     const index = this.constraint.patternElements.indexOf(pattern);
-    if(index > -1){
+    if (index > -1) {
       this.constraint.patternElements.splice(index, 1);
       this.patternErrors.splice(index, 1);
     }
@@ -69,13 +75,16 @@ export class UnwantedPatternsComponent implements OnInit {
 
   emitErrorState() {
     let errorState = false;
-    if(this.patternErrors.indexOf(true) > -1 || this.weightErrorState === true) {
+    if (
+      this.patternErrors.indexOf(true) > -1 ||
+      this.weightErrorState === true
+    ) {
       errorState = true;
     }
     this.errorState.emit(errorState);
   }
-  
-  updateWeightErrorState(e:boolean) {
+
+  updateWeightErrorState(e: boolean) {
     this.weightErrorState = e;
     console.log(this.weightErrorState);
     this.emitConstraint();

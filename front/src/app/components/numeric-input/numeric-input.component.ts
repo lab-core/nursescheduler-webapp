@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   FormControl,
   FormGroupDirective,
@@ -23,12 +32,13 @@ export class CustomErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-    selector: "app-numeric-input",
-    templateUrl: "./numeric-input.component.html",
-    styleUrls: ["./numeric-input.component.css"],
-    standalone: false
+  selector: "app-numeric-input",
+  templateUrl: "./numeric-input.component.html",
+  styleUrls: ["./numeric-input.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class NumericInputComponent implements OnInit, OnChanges{
+export class NumericInputComponent implements OnInit, OnChanges {
   @Input() value!: string;
   @Output() valueChange: EventEmitter<string>;
 
@@ -51,20 +61,20 @@ export class NumericInputComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const disabledChange = changes["disabled"]
-    if(disabledChange){
-      this.disabled = disabledChange.currentValue
+    const disabledChange = changes["disabled"];
+    if (disabledChange) {
+      this.disabled = disabledChange.currentValue;
     }
-    this.inputCtrl = this.createFormControl()
+    this.inputCtrl = this.createFormControl();
   }
 
   ngOnInit(): void {
-    this.inputCtrl = this.createFormControl()
+    this.inputCtrl = this.createFormControl();
     this.inputCtrl.setValue(this.value);
-      this.emitValue();
+    this.emitValue();
   }
 
-  createFormControl():FormControl{
+  createFormControl(): FormControl {
     return new FormControl({ value: this.value, disabled: this.disabled }, [
       Validators.required,
       Validators.pattern(NUMERIC_POSITIVE_NUMBERS),

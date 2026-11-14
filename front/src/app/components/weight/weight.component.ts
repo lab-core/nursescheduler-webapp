@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   FormControl,
   FormGroupDirective,
@@ -10,7 +19,10 @@ import {
   WEIGHT_MAX_VALUE,
   WEIGHT_MIN_VALUE,
 } from "src/app/constants/constraints";
-import { WEIGHT_ALLOWED_INTEGERS, WEIGHT_ALLOWED_ZERO } from "src/app/constants/regex";
+import {
+  WEIGHT_ALLOWED_INTEGERS,
+  WEIGHT_ALLOWED_ZERO,
+} from "src/app/constants/regex";
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -27,17 +39,18 @@ export class CustomErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-    selector: "app-weight",
-    templateUrl: "./weight.component.html",
-    styleUrls: ["./weight.component.css"],
-    standalone: false
+  selector: "app-weight",
+  templateUrl: "./weight.component.html",
+  styleUrls: ["./weight.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class WeightComponent implements OnInit, OnChanges{
+export class WeightComponent implements OnInit, OnChanges {
   @Input() weight!: string;
   @Input() label!: string;
 
   localWeight: string;
-  @Input() allowZero: boolean
+  @Input() allowZero: boolean;
 
   @Output() weightChange: EventEmitter<string>;
   numberChecks: number;
@@ -52,7 +65,7 @@ export class WeightComponent implements OnInit, OnChanges{
     this.numberChecks = 0;
     this.disabled = false;
     this.localWeight = "";
-    this.allowZero = false
+    this.allowZero = false;
     this.inputCtrl = new FormControl({ value: this.weight, disabled: false }, [
       Validators.required,
       Validators.pattern(WEIGHT_ALLOWED_INTEGERS),
@@ -64,10 +77,10 @@ export class WeightComponent implements OnInit, OnChanges{
   }
 
   ngOnInit(): void {
-    this.disabled = this.weight === "hard"? true: false;
+    this.disabled = this.weight === "hard" ? true : false;
     this.update();
-    if(!this.disabled){
-      this.inputCtrl.setValue(this.weight)
+    if (!this.disabled) {
+      this.inputCtrl.setValue(this.weight);
     }
     this.emitWeight();
   }
@@ -75,23 +88,22 @@ export class WeightComponent implements OnInit, OnChanges{
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ngOnChanges(changes: SimpleChanges): void {
     this.weight = changes["weight"].currentValue;
-    this.disabled = this.weight === "hard"? true: false;
-    this.inputCtrl = this.updateFormControl(this.disabled)
+    this.disabled = this.weight === "hard" ? true : false;
+    this.inputCtrl = this.updateFormControl(this.disabled);
   }
 
   update() {
     this.numberChecks++;
     if (!this.disabled) {
-      this.weight = this.localWeight === ""? this.weight: this.localWeight;
-      if(this.weight === "hard"){
+      this.weight = this.localWeight === "" ? this.weight : this.localWeight;
+      if (this.weight === "hard") {
         this.weight = "0";
       }
-    } 
-    else {
-        if(this.weight !== "hard"){
-          this.localWeight = this.weight;
-        }
-        this.weight = "hard";
+    } else {
+      if (this.weight !== "hard") {
+        this.localWeight = this.weight;
+      }
+      this.weight = "hard";
     }
     this.inputCtrl = this.updateFormControl(this.disabled);
     this.emitWeight();
@@ -106,12 +118,14 @@ export class WeightComponent implements OnInit, OnChanges{
     if (disabled) {
       return new FormControl({ value: this.localWeight, disabled: true });
     }
-    const patternToUse = this.allowZero? WEIGHT_ALLOWED_ZERO : WEIGHT_ALLOWED_INTEGERS
+    const patternToUse = this.allowZero
+      ? WEIGHT_ALLOWED_ZERO
+      : WEIGHT_ALLOWED_INTEGERS;
     return new FormControl({ value: this.weight, disabled: false }, [
       Validators.required,
       Validators.pattern(patternToUse),
       Validators.min(-100),
-      Validators.max(100)
+      Validators.max(100),
     ]);
   }
 

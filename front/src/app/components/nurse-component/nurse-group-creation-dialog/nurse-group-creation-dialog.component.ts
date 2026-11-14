@@ -1,19 +1,31 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { NurseGroupInterface} from 'src/app/models/Nurse';
-import { ContractGroupService } from 'src/app/services/contract/contract-group.service';
-import { ContractService } from 'src/app/services/contract/contract.service';
-import { NurseGroupService } from 'src/app/services/nurse/nurse-group.service';
-import { NurseService } from 'src/app/services/nurse/nurse.service';
-import { Exception } from 'src/app/utils/Exception';
-import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-message-dialog.component';
+import { HttpErrorResponse, HttpStatusCode } from "@angular/common/http";
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
+import { NurseGroupInterface } from "src/app/models/Nurse";
+import { ContractGroupService } from "src/app/services/contract/contract-group.service";
+import { ContractService } from "src/app/services/contract/contract.service";
+import { NurseGroupService } from "src/app/services/nurse/nurse-group.service";
+import { NurseService } from "src/app/services/nurse/nurse.service";
+import { Exception } from "src/app/utils/Exception";
+import { ErrorMessageDialogComponent } from "../../error-message-dialog/error-message-dialog.component";
 
 @Component({
-    selector: 'app-nurse-group-creation-dialog',
-    templateUrl: './nurse-group-creation-dialog.component.html',
-    styleUrls: ['./nurse-group-creation-dialog.component.css'],
-    standalone: false
+  selector: "app-nurse-group-creation-dialog",
+  templateUrl: "./nurse-group-creation-dialog.component.html",
+  styleUrls: ["./nurse-group-creation-dialog.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class NurseGroupCreationDialogComponent implements OnInit {
   @Output() errorState: EventEmitter<boolean>;
@@ -25,127 +37,120 @@ export class NurseGroupCreationDialogComponent implements OnInit {
   nursesLoaded: boolean;
   contractsLoaded: boolean;
   contractsGroupLoaded: boolean;
-  
 
-  constructor(public dialogRef: MatDialogRef<NurseGroupCreationDialogComponent >,
-    @Inject(MAT_DIALOG_DATA) public data:  {nurseGroup: NurseGroupInterface, nurseGroups: string[]},
-    private api: NurseGroupService, private nurseService: NurseService,
+  constructor(
+    public dialogRef: MatDialogRef<NurseGroupCreationDialogComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { nurseGroup: NurseGroupInterface; nurseGroups: string[] },
+    private api: NurseGroupService,
+    private nurseService: NurseService,
     private contractService: ContractService,
     private contractGroupService: ContractGroupService,
-    private dialog: MatDialog,  
-) {
-  this.errorState = new EventEmitter();
-  this.nurseGroupErrorState = true;
-  this.initNurseGroupName = data.nurseGroup.name;
-  this.nursesLoaded = false;
-  this.contractsLoaded = false;
-  this.contractsGroupLoaded = false;
-      
-}
+    private dialog: MatDialog
+  ) {
+    this.errorState = new EventEmitter();
+    this.nurseGroupErrorState = true;
+    this.initNurseGroupName = data.nurseGroup.name;
+    this.nursesLoaded = false;
+    this.contractsLoaded = false;
+    this.contractsGroupLoaded = false;
+  }
   ngOnInit(): void {
     this.possibleContracts = [];
     this.possibleContractsGroup = [];
     this.possibleNurses = [];
-    try{
+    try {
       this.contractService.getContractNames().subscribe({
-        next: (contracts: string[])=>{
-          contracts.forEach((contract: string)=>{
+        next: (contracts: string[]) => {
+          contracts.forEach((contract: string) => {
             this.possibleContracts.push(contract);
-          })
+          });
           this.contractsLoaded = true;
         },
-        error: (error: HttpErrorResponse)=>{
+        error: (error: HttpErrorResponse) => {
           this.openErrorDialog(error.error);
-        }
-      })
-    }catch(err){
+        },
+      });
+    } catch (err) {
       //Do nothing
     }
 
-    try{
+    try {
       this.nurseService.getAllNurseUsername().subscribe({
-        next: (nurses: string[])=>{
-          nurses.forEach((nurse: string)=>{
+        next: (nurses: string[]) => {
+          nurses.forEach((nurse: string) => {
             this.possibleNurses.push(nurse);
-          })
+          });
           this.nursesLoaded = true;
         },
-        error: (error: HttpErrorResponse)=>{
+        error: (error: HttpErrorResponse) => {
           this.openErrorDialog(error.error);
-        }
-      })
-    }catch(err){
+        },
+      });
+    } catch (err) {
       //Do nothing
     }
-  try{
-    this.contractGroupService.getAllContractGroupName().subscribe({
-      next: (contractsGroup: string[])=>{
-        contractsGroup.forEach((contractGroup: string)=>{
-          this.possibleContractsGroup.push(contractGroup);
-        })
-        this.contractsGroupLoaded = true;
-      },
-      error: (error: HttpErrorResponse)=>{
-        this.openErrorDialog(error.error);
-      }
-    })
-  }catch(err){
-    //Do nothing
-  }
-
+    try {
+      this.contractGroupService.getAllContractGroupName().subscribe({
+        next: (contractsGroup: string[]) => {
+          contractsGroup.forEach((contractGroup: string) => {
+            this.possibleContractsGroup.push(contractGroup);
+          });
+          this.contractsGroupLoaded = true;
+        },
+        error: (error: HttpErrorResponse) => {
+          this.openErrorDialog(error.error);
+        },
+      });
+    } catch (err) {
+      //Do nothing
+    }
   }
 
   add() {
-    try
-    { 
+    try {
       console.log(this.data.nurseGroup);
-      if(this.initNurseGroupName === ""){
+      if (this.initNurseGroupName === "") {
         this.api.addNurseGroup(this.data.nurseGroup).subscribe({
-          error: (err: HttpErrorResponse)=> {
-            if(err.status === HttpStatusCode.Ok) {
+          error: (err: HttpErrorResponse) => {
+            if (err.status === HttpStatusCode.Ok) {
               this.close();
+            } else {
+              this.openErrorDialog(err.error);
             }
-            else{
-              this.openErrorDialog(err.error)
-            }
-          } 
-        })
-      }
-      else {
+          },
+        });
+      } else {
         this.api.updateNurseGroup(this.data.nurseGroup).subscribe({
-          error: (err: HttpErrorResponse)=> {
-            if(err.status === HttpStatusCode.Ok) {
+          error: (err: HttpErrorResponse) => {
+            if (err.status === HttpStatusCode.Ok) {
               this.close();
-            }          
-            else{
-              this.openErrorDialog(err.error)
+            } else {
+              this.openErrorDialog(err.error);
             }
-          }
-        })
-      } 
-    }
-    catch(e){
-      this.openErrorDialog((e as Exception).getMessage())
+          },
+        });
+      }
+    } catch (e) {
+      this.openErrorDialog((e as Exception).getMessage());
     }
   }
 
+  openErrorDialog(message: string) {
+    this.dialog.open(ErrorMessageDialogComponent, {
+      height: "45%",
+      width: "45%",
+      position: { top: "20vh", left: "30%", right: "25%" },
+      data: { message: message },
+    });
+  }
 
-openErrorDialog(message: string) {
-  this.dialog.open(ErrorMessageDialogComponent, {
-    height: '45%',
-    width: '45%', 
-    position: {top:'20vh',left: '30%', right: '25%'},
-    data: {message: message},
-  })
-}
+  close() {
+    this.dialogRef.close();
+  }
 
-close(){
-  this.dialogRef.close();
-
-}
-
-updateNurseGroupErrorState(e: boolean) {
-  console.log("update")
-  this.nurseGroupErrorState = e;
-}
+  updateNurseGroupErrorState(e: boolean) {
+    console.log("update");
+    this.nurseGroupErrorState = e;
+  }
 }

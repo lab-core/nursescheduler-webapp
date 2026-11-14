@@ -35,14 +35,6 @@ $nurseScheduling-theme: mat.m2-define-light-theme((
     overflow: hidden;
 }
 
-.timepicker-overlay {
-    z-index: 10000000 !important;
-}
-
-.timepicker-backdrop-overlay {
-    z-index: 10000000 !important;
-}
-
 button[color=nurse-blue] {
     background-color: #214e83 !important; //blue for the buttons 
     color: white !important;
