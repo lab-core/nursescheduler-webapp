@@ -1,15 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { BASE_VALUE } from 'src/app/constants/constraints';
-import { UnwantedSkills } from 'src/app/models/UnwantedSkills';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { FormControl, Validators } from "@angular/forms";
+import { BASE_VALUE } from "src/app/constants/constraints";
+import { UnwantedSkills } from "src/app/models/UnwantedSkills";
 
 @Component({
-  selector: 'app-unwanted-skills',
-  templateUrl: './unwanted-skills.component.html',
-  styleUrls: ['./unwanted-skills.component.css']
+  selector: "app-unwanted-skills",
+  templateUrl: "./unwanted-skills.component.html",
+  styleUrls: ["./unwanted-skills.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class UnwantedSkillsComponent implements OnInit{
-
+export class UnwantedSkillsComponent implements OnInit {
   @Input() constraint!: UnwantedSkills;
   @Input() skills!: string[];
   skillsFormCtrl: FormControl[];
@@ -19,7 +27,7 @@ export class UnwantedSkillsComponent implements OnInit{
   weightLabel: string;
   weightError: boolean;
 
-  constructor(){
+  constructor() {
     this.errorState = new EventEmitter();
     this.constraintChange = new EventEmitter();
     this.skillsFormCtrl = [];
@@ -28,17 +36,17 @@ export class UnwantedSkillsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    for(const skill of this.constraint.skills){
+    for (const skill of this.constraint.skills) {
       const newFormControl = this.createFormControl();
       newFormControl.setValue(skill);
       this.skillsFormCtrl.push(newFormControl);
     }
     this.weightError = this.constraint.weight === BASE_VALUE;
 
-    for(let i=0; i< this.constraint.skills.length; i++) {
-      if(!this.skills.includes(this.constraint.skills[i])){
-        this.constraint.skills.splice(i,1);
-        this.skillsFormCtrl.splice(i,1);
+    for (let i = 0; i < this.constraint.skills.length; i++) {
+      if (!this.skills.includes(this.constraint.skills[i])) {
+        this.constraint.skills.splice(i, 1);
+        this.skillsFormCtrl.splice(i, 1);
       }
     }
     this.emitConstraint();
@@ -48,7 +56,7 @@ export class UnwantedSkillsComponent implements OnInit{
     return new FormControl(null, Validators.required);
   }
 
-  updateWeightErrorState(e: boolean){
+  updateWeightErrorState(e: boolean) {
     this.weightError = e;
     this.emitConstraint();
   }
@@ -58,18 +66,20 @@ export class UnwantedSkillsComponent implements OnInit{
     this.emitErrorState();
   }
 
-  emitErrorState(){
+  emitErrorState() {
     let skillsError = false;
-    for(const form of this.skillsFormCtrl){
-      if(form.hasError('required')){
+    for (const form of this.skillsFormCtrl) {
+      if (form.hasError("required")) {
         skillsError = true;
         break;
       }
     }
-    console.log(skillsError)
-    this.errorState.emit(skillsError || this.weightError || this.constraint.skills.length === 0);
+    console.log(skillsError);
+    this.errorState.emit(
+      skillsError || this.weightError || this.constraint.skills.length === 0
+    );
   }
-  
+
   addSkill() {
     this.constraint.skills.push("");
     this.skillsFormCtrl.push(this.createFormControl());
@@ -78,11 +88,7 @@ export class UnwantedSkillsComponent implements OnInit{
 
   deleteSkill(index: number) {
     this.constraint.skills.splice(index, 1);
-    this.skillsFormCtrl.splice(index,1);
+    this.skillsFormCtrl.splice(index, 1);
     this.emitConstraint();
-  }
-
-  trackByFn(index: number): number {
-    return index;
   }
 }

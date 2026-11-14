@@ -1,7 +1,9 @@
-<div *ngIf="connectedUser; else elseBlock">
+@if (connectedUser) {
+<div>
   <app-header></app-header>
   <app-sidenav-contract id="contract-group-nav-bar"></app-sidenav-contract>
-  <div *ngIf="this.contractGroups.length > 0; else noContractGroups">
+  @if (this.contractGroups.length > 0) {
+  <div>
     <div class="button-container">
       <mat-form-field class="filter">
         <mat-label>Filter</mat-label>
@@ -21,7 +23,6 @@
         Add new Contract Group
       </button>
     </div>
-
     <div class="mat-elevation-z8">
       <div id="table-wrapper">
         <table mat-table [dataSource]="dataSource" matSort>
@@ -30,13 +31,11 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
             <td mat-cell *matCellDef="let element">{{ element.name }}</td>
           </ng-container>
-
           <!-- contracts Column -->
           <ng-container matColumnDef="contracts">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Contracts</th>
             <td mat-cell *matCellDef="let element">{{ element.contracts }}</td>
           </ng-container>
-
           <!-- Action Column -->
           <ng-container matColumnDef="actions" justify="end">
             <th mat-header-cell *matHeaderCellDef aria-label="row actions">
@@ -68,10 +67,8 @@
               </mat-menu>
             </td>
           </ng-container>
-
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
           <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" colspan="4">
@@ -80,26 +77,25 @@
           </tr>
         </table>
       </div>
-
       <mat-paginator
         [pageSizeOptions]="[5]"
         aria-label="Select page of users"
       ></mat-paginator>
     </div>
   </div>
-  <ng-template #noContractGroups>
-    <div class="noContractGroups">
-      <p>There is no contract group please add one</p>
-      <button
-        mat-raised-button
-        class="buttonCreateEmpty"
-        (click)="createNewContractGroup()"
-      >
-        Add new Contract Group
-      </button>
-    </div>
-  </ng-template>
+  } @else {
+  <div class="noContractGroups">
+    <p>There is no contract group please add one</p>
+    <button
+      mat-raised-button
+      class="buttonCreateEmpty"
+      (click)="createNewContractGroup()"
+    >
+      Add new Contract Group
+    </button>
+  </div>
+  }
 </div>
-<ng-template #elseBlock>
-  <app-not-connected></app-not-connected>
-</ng-template>
+} @else {
+<app-not-connected></app-not-connected>
+}

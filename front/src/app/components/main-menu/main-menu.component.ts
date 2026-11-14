@@ -1,5 +1,11 @@
-import { CONTRACTS, SHIFT, CREATE_ACCOUNT, NURSE, VIEW_SCHEDULES } from "src/app/constants/app-routes";
-import { Component, OnInit } from "@angular/core";
+import {
+  CONTRACTS,
+  SHIFT,
+  CREATE_ACCOUNT,
+  NURSE,
+  VIEW_SCHEDULES,
+} from "src/app/constants/app-routes";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { MAIN_MENU_BUTTONS } from "src/app/constants/mainMenuButton";
@@ -10,8 +16,10 @@ import { CacheUtils } from "src/app/utils/CacheUtils";
   selector: "app-main-menu",
   templateUrl: "./main-menu.component.html",
   styleUrls: ["./main-menu.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class MainMenuComponent implements OnInit{
+export class MainMenuComponent implements OnInit {
   buttons: MainMenuButton[];
   isAdminUser!: boolean;
   connectedUser!: boolean;
@@ -21,11 +29,10 @@ export class MainMenuComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    try{
+    try {
       this.isAdminUser = CacheUtils.getIsAdmin();
       this.connectedUser = true;
-    }
-    catch(err){
+    } catch (err) {
       this.connectedUser = false;
     }
   }
@@ -52,8 +59,8 @@ export class MainMenuComponent implements OnInit{
     }
   }
 
-  show(button: MainMenuButton): boolean{
-    if(button.title === "User" && !this.isAdminUser){
+  show(button: MainMenuButton): boolean {
+    if (button.title === "User" && !this.isAdminUser) {
       return false;
     }
     return true;

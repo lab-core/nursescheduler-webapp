@@ -1,45 +1,67 @@
 <div class="title" mat-dialog-title>Share Profile</div>
 <div class="share-container">
-    <div class="share-section">
-        <label>Share with:</label>
-        <mat-form-field class="header">
-                <mat-chip *ngFor="let user of usersToShareWith" (removed)="removeName(user)">
-                    {{user}}
-                    <mat-icon matChipRemove>clear</mat-icon>
-                </mat-chip>
-                <input
-                    matInput
-                    #nameInput
-                    [formControl]="userCtrl"
-                    [matAutocomplete]="auto"
-                    placeholder="Enter the names"
-                />
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                <mat-option *ngFor="let user of filterNames | async" [value]="user">
-                    {{ user }}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
-        <button class="share-button" mat-raised-button color="primary" [disabled]="usersToShareWith.length === 0" (click)="share()">
-            Share
-        </button>
-    </div>
-    <div class="aceesors-section">
-        <h2>Allowed Users:</h2>
-        <table cellspacing="10" class="table">
-            <tr *ngFor="let acessor of accessors" >
-                <div class="table-element-container flex-row-center-container">        
-                <td *ngIf="acessor !== currentUser">
-                    <span>{{acessor}}</span>
-                </td>
-                <td *ngIf="acessor !== currentUser">
-                    <button mat-icon-button (click)="revoke(acessor)"><mat-icon>cancel</mat-icon></button>
-                </td>
-                </div>
-            </tr>
-        </table>
-    </div>
-    <div class="buttons-section">
-        <button mat-raised-button color="warn" [mat-dialog-close]="true">Close</button>
-    </div>
+  <div class="share-section">
+    <label>Share with:</label>
+    <mat-form-field class="header">
+      @for (user of usersToShareWith; track user) {
+      <mat-chip (removed)="removeName(user)">
+        {{ user }}
+        <mat-icon matChipRemove>clear</mat-icon>
+      </mat-chip>
+      }
+      <input
+        matInput
+        #nameInput
+        [formControl]="userCtrl"
+        [matAutocomplete]="auto"
+        placeholder="Enter the names"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="selected($event)"
+      >
+        @for (user of filterNames | async; track user) {
+        <mat-option [value]="user">
+          {{ user }}
+        </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+    <button
+      class="share-button"
+      mat-raised-button
+      color="primary"
+      [disabled]="usersToShareWith.length === 0"
+      (click)="share()"
+    >
+      Share
+    </button>
+  </div>
+  <div class="aceesors-section">
+    <h2>Allowed Users:</h2>
+    <table cellspacing="10" class="table">
+      @for (acessor of accessors; track acessor) {
+      <tr>
+        <div class="table-element-container flex-row-center-container">
+          @if (acessor !== currentUser) {
+          <td>
+            <span>{{ acessor }}</span>
+          </td>
+          } @if (acessor !== currentUser) {
+          <td>
+            <button mat-icon-button (click)="revoke(acessor)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </td>
+          }
+        </div>
+      </tr>
+      }
+    </table>
+  </div>
+  <div class="buttons-section">
+    <button mat-raised-button color="warn" [mat-dialog-close]="true">
+      Close
+    </button>
+  </div>
 </div>

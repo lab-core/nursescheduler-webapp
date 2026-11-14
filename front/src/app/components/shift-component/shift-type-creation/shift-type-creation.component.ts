@@ -1,11 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { ShiftTypeInterface } from 'src/app/models/Shift';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { FormControl, Validators } from "@angular/forms";
+import { ShiftTypeInterface } from "src/app/models/Shift";
 
 @Component({
-  selector: 'app-shift-type-creation',
-  templateUrl: './shift-type-creation.component.html',
-  styleUrls: ['./shift-type-creation.component.css']
+  selector: "app-shift-type-creation",
+  templateUrl: "./shift-type-creation.component.html",
+  styleUrls: ["./shift-type-creation.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class ShiftTypeCreationComponent implements OnInit, OnChanges {
   @Input() shiftType!: ShiftTypeInterface;
@@ -13,56 +24,57 @@ export class ShiftTypeCreationComponent implements OnInit, OnChanges {
   @Output() errorState: EventEmitter<boolean>;
   @Input() possibleShifts!: string[];
   @Input() selectedShift!: string;
-  @Input() shiftsType!: string[]
+  @Input() shiftsType!: string[];
   @Input() imported: boolean;
 
   nameShiftTypeFormCtrl: FormControl;
   shiftTypeSelectorError: boolean;
   inputDisabled: boolean;
   shiftTypeStartName!: string;
-  localShifts: string[]
+  localShifts: string[];
 
-
-  constructor(){
+  constructor() {
     this.shiftTypeChange = new EventEmitter();
     this.errorState = new EventEmitter();
     this.imported = false;
     this.nameShiftTypeFormCtrl = new FormControl(null, Validators.required);
     this.shiftTypeSelectorError = true;
     this.inputDisabled = false;
-    this.localShifts = [] 
+    this.localShifts = [];
   }
 
   ngOnInit(): void {
-    this.inputDisabled = this.shiftType.name === "" || this.imported? false: true;
-    this.nameShiftTypeFormCtrl = new FormControl({value: this.shiftType.name, disabled: this.inputDisabled},
-      Validators.required);
+    this.inputDisabled =
+      this.shiftType.name === "" || this.imported ? false : true;
+    this.nameShiftTypeFormCtrl = new FormControl(
+      { value: this.shiftType.name, disabled: this.inputDisabled },
+      Validators.required
+    );
     this.shiftTypeStartName = this.shiftType.name;
-    for(let i=0; i < this.shiftType.shifts.length; i++){
-      if(!this.possibleShifts.includes(this.shiftType.shifts[i])){
-        this.shiftType.shifts.splice(i,1);
+    for (let i = 0; i < this.shiftType.shifts.length; i++) {
+      if (!this.possibleShifts.includes(this.shiftType.shifts[i])) {
+        this.shiftType.shifts.splice(i, 1);
       }
     }
-    this.updateShifts()
-    this.emitShiftType()
-   
+    this.updateShifts();
+    this.emitShiftType();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ngOnChanges(changes: SimpleChanges): void {
-      this.updateShifts()
+    this.updateShifts();
   }
 
-  updateShifts(){
-    this.localShifts = [...this.possibleShifts]
-    this.shiftType.shifts.forEach((s: string)=>{
-      const index = this.localShifts.indexOf(s)
-      if(index > -1){
-        this.localShifts.splice(index, 1)
+  updateShifts() {
+    this.localShifts = [...this.possibleShifts];
+    this.shiftType.shifts.forEach((s: string) => {
+      const index = this.localShifts.indexOf(s);
+      if (index > -1) {
+        this.localShifts.splice(index, 1);
       }
-    })
-    if(this.localShifts.length > 0){
-      this.selectedShift = this.localShifts[0]
+    });
+    if (this.localShifts.length > 0) {
+      this.selectedShift = this.localShifts[0];
     }
   }
 
@@ -73,12 +85,12 @@ export class ShiftTypeCreationComponent implements OnInit, OnChanges {
     }
     this.shiftType.shifts.push(this.selectedShift);
     if (this.localShifts.length > 0) {
-        this.selectedShift= this.localShifts[0];
+      this.selectedShift = this.localShifts[0];
     }
     this.shiftTypeSelectorError = false;
     this.emitShiftType();
   }
-  
+
   removeShift(shift: string) {
     const indexShiftType = this.shiftType.shifts.indexOf(shift);
     if (indexShiftType > -1) {
@@ -86,34 +98,36 @@ export class ShiftTypeCreationComponent implements OnInit, OnChanges {
     }
     if (shift !== undefined && shift !== null) {
       this.localShifts.push(shift);
-      this.selectedShift= this.localShifts[0];
+      this.selectedShift = this.localShifts[0];
     }
-    if(this.shiftType.shifts.length === 0){
+    if (this.shiftType.shifts.length === 0) {
       this.shiftTypeSelectorError = true;
-    } 
-    this.emitShiftType()
+    }
+    this.emitShiftType();
   }
 
-
-  emitShiftType(){
+  emitShiftType() {
     this.shiftTypeChange.emit(this.shiftType);
     this.emitErrorState();
   }
 
   emitErrorState() {
-    this.errorState.emit(this.nameShiftTypeFormCtrl.hasError('required') || (this.nameExist() && this.shiftTypeStartName === '') || this.shiftType.shifts.length === 0);
+    this.errorState.emit(
+      this.nameShiftTypeFormCtrl.hasError("required") ||
+        (this.nameExist() && this.shiftTypeStartName === "") ||
+        this.shiftType.shifts.length === 0
+    );
     console.log("error");
   }
 
   nameExist(): boolean {
-    const temp = [...this.shiftsType]
-    if(this.imported){
-      const index = temp.indexOf(this.shiftType.name)
-      if(index > -1){
+    const temp = [...this.shiftsType];
+    if (this.imported) {
+      const index = temp.indexOf(this.shiftType.name);
+      if (index > -1) {
         temp.splice(index, 1);
       }
     }
     return temp.includes(this.shiftType.name);
   }
-
 }

@@ -1,33 +1,43 @@
-import { Component } from '@angular/core';
-import { 
-    IDENTICAL_WEEKEND_ID, 
-    IDENTICAL_WEEKEND_DISPLAY_NAME,UNWANTED_PATTERNS_DISPLAY_NAME,
-    UNWANTED_PATTERNS_ID, ALTERNATIVE_SHIFT_ID,
-    ALTERNATIVE_SHIFT_DISPLAY_NAME, BASE_VALUE,
-    FREE_DAYS_AFTER_SHIFT_DISPLAY_NAME,
-    FREE_DAYS_AFTER_SHIFT_ID, MIN_MAX_CONSECUTIVE_SHIFT_TYPE_DISPLAY_NAME,
-    MIN_MAX_CONSECUTIVE_SHIFT_TYPE_ID, TOTAL_WEEKENDS_IN_FOUR_WEEKS_DISPLAY_NAME,
-    TOTAL_WEEKENDS_IN_FOUR_WEEKS_ID, MIN_MAX_CONSECUTIVE_WORKING_WEEKENDS_ID,
-    MIN_MAX_CONSECUTIVE_WORKING_WEEKENDS_DISPLAY_NAME,
-    UNWANTED_SKILLS_DISPLAY_NAME, UNWANTED_SKILLS_ID, } from 'src/app/constants/constraints';
-import { shiftExample } from 'src/app/constants/shifts';
-import { AlternativeShift } from 'src/app/models/AlternativeShift';
-import { MinMaxShiftConstraint } from 'src/app/models/MinMaxShiftConstraint';
-import { ShiftConstraint } from 'src/app/models/ShiftConstraint';
-import { UnwantedPatterns } from 'src/app/models/UnwantedPatterns';
+import { Component, ChangeDetectionStrategy } from "@angular/core";
+import {
+  IDENTICAL_WEEKEND_ID,
+  IDENTICAL_WEEKEND_DISPLAY_NAME,
+  UNWANTED_PATTERNS_DISPLAY_NAME,
+  UNWANTED_PATTERNS_ID,
+  ALTERNATIVE_SHIFT_ID,
+  ALTERNATIVE_SHIFT_DISPLAY_NAME,
+  BASE_VALUE,
+  FREE_DAYS_AFTER_SHIFT_DISPLAY_NAME,
+  FREE_DAYS_AFTER_SHIFT_ID,
+  MIN_MAX_CONSECUTIVE_SHIFT_TYPE_DISPLAY_NAME,
+  MIN_MAX_CONSECUTIVE_SHIFT_TYPE_ID,
+  TOTAL_WEEKENDS_IN_FOUR_WEEKS_DISPLAY_NAME,
+  TOTAL_WEEKENDS_IN_FOUR_WEEKS_ID,
+  MIN_MAX_CONSECUTIVE_WORKING_WEEKENDS_ID,
+  MIN_MAX_CONSECUTIVE_WORKING_WEEKENDS_DISPLAY_NAME,
+  UNWANTED_SKILLS_DISPLAY_NAME,
+  UNWANTED_SKILLS_ID,
+} from "src/app/constants/constraints";
+import { shiftExample } from "src/app/constants/shifts";
+import { AlternativeShift } from "src/app/models/AlternativeShift";
+import { MinMaxShiftConstraint } from "src/app/models/MinMaxShiftConstraint";
+import { ShiftConstraint } from "src/app/models/ShiftConstraint";
+import { UnwantedPatterns } from "src/app/models/UnwantedPatterns";
 import { BooleanConstraint } from "src/app/models/BooleanConstraint";
 import { IntegerConstraint } from "src/app/models/IntegerConstraint";
-import { MinMaxConstraint } from 'src/app/models/MinMaxConstraint';
+import { MinMaxConstraint } from "src/app/models/MinMaxConstraint";
 import { UnwantedSkills } from "src/app/models/UnwantedSkills";
 
 @Component({
   selector: "app-testing",
   templateUrl: "./testing.component.html",
   styleUrls: ["./testing.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TestingComponent {
   weight = BASE_VALUE;
-  possibleShifts: string[]
+  possibleShifts: string[];
   alternativeConstraint: AlternativeShift;
   alternativeShiftConstraintErrorState: boolean;
   shiftTypeConstraint: ShiftConstraint;
@@ -41,7 +51,7 @@ export class TestingComponent {
   UnwantedPatternsErrorState: boolean;
 
   integerConstraint: IntegerConstraint;
-  integerConstraintErrorState:boolean;
+  integerConstraintErrorState: boolean;
 
   minMaxConstraint: MinMaxConstraint;
   minMaxErrorConstraint: boolean;
@@ -53,61 +63,81 @@ export class TestingComponent {
 
   constructor() {
     this.possibleShifts = shiftExample;
-    this.alternativeConstraint = new AlternativeShift(ALTERNATIVE_SHIFT_ID,ALTERNATIVE_SHIFT_DISPLAY_NAME);
+    this.alternativeConstraint = new AlternativeShift(
+      ALTERNATIVE_SHIFT_ID,
+      ALTERNATIVE_SHIFT_DISPLAY_NAME
+    );
     this.alternativeShiftConstraintErrorState = true;
-    this.shiftTypeConstraint = new ShiftConstraint(FREE_DAYS_AFTER_SHIFT_ID, FREE_DAYS_AFTER_SHIFT_DISPLAY_NAME);
+    this.shiftTypeConstraint = new ShiftConstraint(
+      FREE_DAYS_AFTER_SHIFT_ID,
+      FREE_DAYS_AFTER_SHIFT_DISPLAY_NAME
+    );
     this.shiftTypeConstraintErrorState = true;
-    this.minMaxConsecutiveShift = new MinMaxShiftConstraint(MIN_MAX_CONSECUTIVE_SHIFT_TYPE_ID, MIN_MAX_CONSECUTIVE_SHIFT_TYPE_DISPLAY_NAME);
+    this.minMaxConsecutiveShift = new MinMaxShiftConstraint(
+      MIN_MAX_CONSECUTIVE_SHIFT_TYPE_ID,
+      MIN_MAX_CONSECUTIVE_SHIFT_TYPE_DISPLAY_NAME
+    );
     this.minMaxShiftConstraintErrorState = true;
-    this.UnwantedPatternsConstraint = new UnwantedPatterns(UNWANTED_PATTERNS_ID,UNWANTED_PATTERNS_DISPLAY_NAME);
+    this.UnwantedPatternsConstraint = new UnwantedPatterns(
+      UNWANTED_PATTERNS_ID,
+      UNWANTED_PATTERNS_DISPLAY_NAME
+    );
     this.UnwantedPatternsErrorState = true;
-    this.UnwantedSkillsConstraint = new UnwantedSkills(UNWANTED_SKILLS_ID, UNWANTED_SKILLS_DISPLAY_NAME);
+    this.UnwantedSkillsConstraint = new UnwantedSkills(
+      UNWANTED_SKILLS_ID,
+      UNWANTED_SKILLS_DISPLAY_NAME
+    );
     this.unWantedSkillsErrorState = true;
     this.booleanConstraint = new BooleanConstraint(
       IDENTICAL_WEEKEND_ID,
       IDENTICAL_WEEKEND_DISPLAY_NAME
     );
     this.booleanConstraintErrorState = true;
-    this.integerConstraint = new IntegerConstraint(TOTAL_WEEKENDS_IN_FOUR_WEEKS_ID, TOTAL_WEEKENDS_IN_FOUR_WEEKS_DISPLAY_NAME);
+    this.integerConstraint = new IntegerConstraint(
+      TOTAL_WEEKENDS_IN_FOUR_WEEKS_ID,
+      TOTAL_WEEKENDS_IN_FOUR_WEEKS_DISPLAY_NAME
+    );
     this.integerConstraintErrorState = true;
     this.minMaxErrorConstraint = true;
-    this.minMaxConstraint = new MinMaxConstraint(MIN_MAX_CONSECUTIVE_WORKING_WEEKENDS_ID, MIN_MAX_CONSECUTIVE_WORKING_WEEKENDS_DISPLAY_NAME);
+    this.minMaxConstraint = new MinMaxConstraint(
+      MIN_MAX_CONSECUTIVE_WORKING_WEEKENDS_ID,
+      MIN_MAX_CONSECUTIVE_WORKING_WEEKENDS_DISPLAY_NAME
+    );
   }
 
   updateBooleanConstraintErrorState(e: boolean) {
     this.booleanConstraintErrorState = e;
   }
 
-
   updateUnwantedPatternsErrorState(e: boolean) {
-    this.UnwantedPatternsErrorState = e
+    this.UnwantedPatternsErrorState = e;
   }
-  
-  updateAlternativeConstraintErrorState(e: boolean){
+
+  updateAlternativeConstraintErrorState(e: boolean) {
     this.alternativeShiftConstraintErrorState = e;
   }
 
-  updateSkillsErrorState(e:boolean) {
+  updateSkillsErrorState(e: boolean) {
     this.unWantedSkillsErrorState = e;
   }
 
-  updateShiftConstraintErrorState(e:boolean) {
+  updateShiftConstraintErrorState(e: boolean) {
     this.shiftTypeConstraintErrorState = e;
   }
 
-  undateUnwantedPatternsErrorState(e:boolean) {
+  undateUnwantedPatternsErrorState(e: boolean) {
     this.UnwantedPatternsErrorState = e;
   }
-  
-  updateMinMaxShiftConstraintErrorState(e:boolean) {
+
+  updateMinMaxShiftConstraintErrorState(e: boolean) {
     this.minMaxShiftConstraintErrorState = e;
   }
 
-  updateIntegerConstraintErrorState(e:boolean) {
+  updateIntegerConstraintErrorState(e: boolean) {
     this.integerConstraintErrorState = e;
   }
 
-  updateMinMaxConstraintErrorState(e:boolean) {
+  updateMinMaxConstraintErrorState(e: boolean) {
     this.minMaxErrorConstraint = e;
   }
 }

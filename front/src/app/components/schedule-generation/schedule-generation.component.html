@@ -1,17 +1,25 @@
-<div *ngIf="connectedUser; else elseBlock">
-  <app-header [showProfile]='true' [enableProfileSwitch]='false'></app-header>
+@if (connectedUser) {
+<div>
+  <app-header [showProfile]="true" [enableProfileSwitch]="false"></app-header>
   <div class="schedule-generation-container">
     <div class="problemDefinitionContainer">
       <div class="PlanningHorizonContainer">
         <div class="title-container">
           <h2>Planning Horizon</h2>
-          <button mat-icon-button class="close-button" (click)="closeView()" color='nurse-blue'><mat-icon>cancel</mat-icon></button>
+          <button
+            mat-icon-button
+            class="close-button"
+            (click)="closeView()"
+            color="nurse-blue"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
         </div>
-        <hr>
+        <hr />
         <mat-form-field appearance="fill">
           <mat-label>Enter a date range</mat-label>
           <mat-date-range-input
-            [style.color]="!validRange() ? 'red': ''"
+            [style.color]="!validRange() ? 'red' : ''"
             [formGroup]="range"
             [rangePicker]="picker"
             seperator="to"
@@ -30,217 +38,338 @@
               (dateChange)="updateEndDate($event)"
             />
           </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
-
-          <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')"
-            >Invalid start date</mat-error
-          >
-          <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')"
-            >Invalid end date</mat-error
-          >
+          @if (range.controls.start.hasError('matStartDateInvalid')) {
+          <mat-error>Invalid start date</mat-error>
+          } @if (range.controls.end.hasError('matEndDateInvalid')) {
+          <mat-error>Invalid end date</mat-error>
+          }
         </mat-form-field>
-        <mat-error *ngIf="!validRange()"
+        @if (!validRange()) {
+        <mat-error
           >The planning horizon must be a multiple of seven days</mat-error
         >
+        }
       </div>
-      <div class="scheduleDataSection">
-      </div>
-
-        <div *ngIf="possibleSkills.length > 0 || possibleShifts.length > 0 || possibleNurses.length > 0" class="flex-row-center-container margin-on-top ">
-          <button mat-raised-button class="add-all-button" color="nurse-blue" (click)="addAll()">
+      <div class="scheduleDataSection"></div>
+      @if (possibleSkills.length > 0 || possibleShifts.length > 0 ||
+      possibleNurses.length > 0) {
+      <div class="flex-row-center-container margin-on-top">
+        <button
+          mat-raised-button
+          class="add-all-button"
+          color="nurse-blue"
+          (click)="addAll()"
+        >
           add all Nurses, Skills & Shifts
-          </button>
-          <mat-card class="info-div">
-          <div class="flex-row-center-container ">
-          <mat-icon class="info-icon">info</mat-icon>
-          <p>Now, add the nurses, shifts and skills you want to include in this schedule. You can add them all at once or specify them in their respective spection below.</p>
+        </button>
+        <mat-card class="info-div">
+          <div class="flex-row-center-container">
+            <mat-icon class="info-icon">info</mat-icon>
+            <p>
+              Now, add the nurses, shifts and skills you want to include in this
+              schedule. You can add them all at once or specify them in their
+              respective spection below.
+            </p>
           </div>
         </mat-card>
-        </div>
-        <div class="nurseSection margin-on-bottom">
+      </div>
+      }
+      <div class="nurseSection margin-on-bottom">
         <h2 class="employeeSectionTitle">Nurses</h2>
-        <hr>
-        <div *ngIf="possibleNurses.length > 0" class="flex-row-center-container">
+        <hr />
+        @if (possibleNurses.length > 0) {
+        <div class="flex-row-center-container">
           <mat-form-field appearance="fill">
             <mat-label>select a nurse</mat-label>
             <mat-select [(value)]="selectedNurse">
-              <mat-option *ngFor="let nurse of possibleNurses" [value]="nurse">
-                {{ nurse.name}} - {{nurse.username}}
+              @for (nurse of possibleNurses; track nurse) {
+              <mat-option [value]="nurse">
+                {{ nurse.name }} - {{ nurse.username }}
               </mat-option>
+              }
             </mat-select>
           </mat-form-field>
-          <button mat-raised-button class="single-action-button" (click)="addNurse()" color="nurse-blue">
+          <button
+            mat-raised-button
+            class="single-action-button"
+            (click)="addNurse()"
+            color="nurse-blue"
+          >
             add selected
           </button>
-          <button mat-raised-button color="nurse-blue" class="bulk-action-button" (click)="addAllNurse()">
-            add all
-          </button><br>
+          <button
+            mat-raised-button
+            color="nurse-blue"
+            class="bulk-action-button"
+            (click)="addAllNurse()"
+          >
+            add all</button
+          ><br />
         </div>
+        }
         <table class="list-table">
-          <th *ngFor="let nurse of  nurses">
+          @for (nurse of nurses; track nurse) {
+          <th>
             <div class="table-element-container flex-row-center-container">
-            <td class="nurseNameUsername">
-              {{nurse.name}} - {{nurse.username}}
-            </td>
-            <button
-              mat-icon-button
-              (click)="removeNurse(nurse)"
-            >
-            <mat-icon>cancel</mat-icon>
-          </button>
+              <td class="nurseNameUsername">
+                {{ nurse.name }} - {{ nurse.username }}
+              </td>
+              <button mat-icon-button (click)="removeNurse(nurse)">
+                <mat-icon>cancel</mat-icon>
+              </button>
             </div>
           </th>
+          }
         </table>
       </div>
       <div class="shiftSection margin-on-bottom">
         <h2 class="shiftSectionTitle">Shifts</h2>
-        <hr>
-        <div *ngIf="possibleShifts.length > 0" class="flex-row-center-container">
+        <hr />
+        @if (possibleShifts.length > 0) {
+        <div class="flex-row-center-container">
           <mat-form-field appearance="fill">
             <mat-label>select a shift</mat-label>
             <mat-select [(value)]="selectedShift">
-              <mat-option *ngFor="let shift of possibleShifts" [value]="shift">
-                {{shift}}
+              @for (shift of possibleShifts; track shift) {
+              <mat-option [value]="shift">
+                {{ shift }}
               </mat-option>
+              }
             </mat-select>
           </mat-form-field>
-          <button mat-raised-button color="nurse-blue" class="single-action-button" (click)="addShift()">
+          <button
+            mat-raised-button
+            color="nurse-blue"
+            class="single-action-button"
+            (click)="addShift()"
+          >
             add selected
           </button>
-          <button mat-raised-button color="nurse-blue" class="bulk-action-button" (click)="addAllShift()">
+          <button
+            mat-raised-button
+            color="nurse-blue"
+            class="bulk-action-button"
+            (click)="addAllShift()"
+          >
             add all
           </button>
         </div>
+        }
         <table class="list-table">
-          <th *ngFor="let shift of shifts">
+          @for (shift of shifts; track shift) {
+          <th>
             <div class="table-element-container flex-row-center-container">
-            <td class="shiftName">
-              {{ shift }}
-            </td>
-            <button
-              mat-icon-button
-              (click)="removeShift(shift)"
-            >
-            <mat-icon>cancel</mat-icon>
-            </button>
+              <td class="shiftName">
+                {{ shift }}
+              </td>
+              <button mat-icon-button (click)="removeShift(shift)">
+                <mat-icon>cancel</mat-icon>
+              </button>
             </div>
           </th>
+          }
         </table>
       </div>
-
       <div class="skillSection margin-on-bottom">
-      <h2 class="shiftSectionTitle">Skills</h2>
-      <hr>
-      <div *ngIf="possibleSkills.length > 0" class="flex-row-center-container">
-        <mat-form-field appearance="fill">
-          <mat-label>select a skill</mat-label>
-          <mat-select [(value)]="selectedSkill">
-            <mat-option *ngFor="let skill of possibleSkills" [value]="skill">
-              {{skill}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button mat-raised-button color="nurse-blue" class="single-action-button" (click)="addSkill()">
-          add selected
-        </button>
-        <button mat-raised-button color="nurse-blue" class="bulk-action-button" (click)="addAllSkill()">
-          add all
-        </button>
-      </div>
-      <table class="list-table">
-        <th *ngFor="let skill of skills">
-          <div class="table-element-container flex-row-center-container">
-          <td class="skillName">
-            {{ skill }}
-          </td>
+        <h2 class="shiftSectionTitle">Skills</h2>
+        <hr />
+        @if (possibleSkills.length > 0) {
+        <div class="flex-row-center-container">
+          <mat-form-field appearance="fill">
+            <mat-label>select a skill</mat-label>
+            <mat-select [(value)]="selectedSkill">
+              @for (skill of possibleSkills; track skill) {
+              <mat-option [value]="skill">
+                {{ skill }}
+              </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
           <button
-            mat-icon-button
-            (click)="removeSkill(skill)"
+            mat-raised-button
+            color="nurse-blue"
+            class="single-action-button"
+            (click)="addSkill()"
           >
-            <mat-icon>cancel</mat-icon>
+            add selected
           </button>
-          </div>
-        </th>
-      </table>
-    </div>
-    <div *ngIf= "shifts.length > 0  && nurses.length > 0 && validRange() && skills.length > 0" class="nursePreferenceSection">
-      <div class="help-div">
-        <h2 class="HospitalDemandSectionTitle">Nurse Preferences</h2>
-        <mat-icon class="help-icon" matTooltip="Enter the weight that will be associated to nurses' preferences in the box below. First click will mark a shift as working (ON). Second click will mark a shift as not working (OFF).  Third click will clear the weight associated to the shift." matTooltipPosition="right" >help</mat-icon>
+          <button
+            mat-raised-button
+            color="nurse-blue"
+            class="bulk-action-button"
+            (click)="addAllSkill()"
+          >
+            add all
+          </button>
+        </div>
+        }
+        <table class="list-table">
+          @for (skill of skills; track skill) {
+          <th>
+            <div class="table-element-container flex-row-center-container">
+              <td class="skillName">
+                {{ skill }}
+              </td>
+              <button mat-icon-button (click)="removeSkill(skill)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </div>
+          </th>
+          }
+        </table>
       </div>
-      <hr>
-      <app-nurse-preference
-        [shifts]="shifts" [nurses]="nurses" [startDate]="startDate" [endDate]="endDate" (schedulePreference)="updatePreferences($event)">
-      </app-nurse-preference>
-    </div>
-
-      <div  *ngIf= "shifts.length > 0  && skills.length > 0 && validRange() && nurses.length > 0" class="HospitalDemandSection">
+      @if (shifts.length > 0 && nurses.length > 0 && validRange() &&
+      skills.length > 0) {
+      <div class="nursePreferenceSection">
+        <div class="help-div">
+          <h2 class="HospitalDemandSectionTitle">Nurse Preferences</h2>
+          <mat-icon
+            class="help-icon"
+            matTooltip="Enter the weight that will be associated to nurses' preferences in the box below. First click will mark a shift as working (ON). Second click will mark a shift as not working (OFF).  Third click will clear the weight associated to the shift."
+            matTooltipPosition="right"
+            >help</mat-icon
+          >
+        </div>
+        <hr />
+        <app-nurse-preference
+          [shifts]="shifts"
+          [nurses]="nurses"
+          [startDate]="startDate"
+          [endDate]="endDate"
+          (schedulePreference)="updatePreferences($event)"
+        >
+        </app-nurse-preference>
+      </div>
+      } @if (shifts.length > 0 && skills.length > 0 && validRange() &&
+      nurses.length > 0) {
+      <div class="HospitalDemandSection">
         <div class="help-div">
           <h2 class="HospitalDemandSectionTitle">Hospital Demand</h2>
-          <mat-icon class="help-icon" matTooltip="Select a shift to input the hospital demand. Enter values and and weight in the box below." matTooltipPosition="right" >help</mat-icon>
+          <mat-icon
+            class="help-icon"
+            matTooltip="Select a shift to input the hospital demand. Enter values and and weight in the box below."
+            matTooltipPosition="right"
+            >help</mat-icon
+          >
         </div>
-          <hr>
-          <app-hopspital-demand-creation [shifts]="shifts" [skills]="skills" [startDate]="startDate" [endDate]="endDate" (hospitalDemand)="updateDemand($event)" (errorState)="updateDemandsErrorState($event)"></app-hopspital-demand-creation>
+        <hr />
+        <app-hopspital-demand-creation
+          [shifts]="shifts"
+          [skills]="skills"
+          [startDate]="startDate"
+          [endDate]="endDate"
+          (hospitalDemand)="updateDemand($event)"
+          (errorState)="updateDemandsErrorState($event)"
+        ></app-hopspital-demand-creation>
       </div>
-      <div *ngIf= "nurses.length > 0 && skills.length > 0 && shifts.length > 0 && validRange()" class="nurseHistorySection">
+      } @if (nurses.length > 0 && skills.length > 0 && shifts.length > 0 &&
+      validRange()) {
+      <div class="nurseHistorySection">
         <div class="help-div">
           <h2 class="HospitalDemandSectionTitle">Work history of nurses</h2>
-          <mat-icon class="help-icon" matTooltip="Select shifts worked by each nurse in the previous planning horizon." matTooltipPosition="right">help</mat-icon>
+          <mat-icon
+            class="help-icon"
+            matTooltip="Select shifts worked by each nurse in the previous planning horizon."
+            matTooltipPosition="right"
+            >help</mat-icon
+          >
         </div>
-        <hr>
-        <app-nurse-history  [nurses]="nurses" [startDate]="startDate"  (nursesHistory)=" updateHistory($event)"></app-nurse-history>
+        <hr />
+        <app-nurse-history
+          [nurses]="nurses"
+          [startDate]="startDate"
+          (nursesHistory)="updateHistory($event)"
+        ></app-nurse-history>
       </div>
-
+      }
       <div class="configSection margin-on-bottom">
         <h2 class="configSectionTitle">Solver configuration</h2>
-        <hr>
+        <hr />
         <div class="configButtonsSection">
           <mat-form-field class="configField" appearance="fill">
-              <mat-label>Configuration profile</mat-label>
-              <mat-select [value]="selectedParam">
-                <mat-option *ngFor="let param of possibleParams" (click)="onParamChange(param)" [value]="param">
-                   {{param}}
-                </mat-option>
+            <mat-label>Configuration profile</mat-label>
+            <mat-select [value]="selectedParam">
+              @for (param of possibleParams; track param) {
+              <mat-option (click)="onParamChange(param)" [value]="param">
+                {{ param }}
+              </mat-option>
+              }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="configField" appearance="fill">
-              <mat-label>Max. number of threads</mat-label>
-              <mat-select [value]="selectedThreads">
-                <mat-option *ngFor="let nThreads of possibleThreads" (click)="onThreadsChange(nThreads)" [value]="nThreads">
-                   {{nThreads}}
-                </mat-option>
+            <mat-label>Max. number of threads</mat-label>
+            <mat-select [value]="selectedThreads">
+              @for (nThreads of possibleThreads; track nThreads) {
+              <mat-option
+                (click)="onThreadsChange(nThreads)"
+                [value]="nThreads"
+              >
+                {{ nThreads }}
+              </mat-option>
+              }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="configField" appearance="fill">
             <mat-label>Max. solving time (minutes)</mat-label>
-            <input matInput class="timeout" type="number" (input)="onTimeoutChange($event)" [value]="selectedTimeout / 60">
+            <input
+              matInput
+              class="timeout"
+              type="number"
+              (input)="onTimeoutChange($event)"
+              [value]="selectedTimeout / 60"
+            />
           </mat-form-field>
         </div>
       </div>
-
       <div class="generateScheduleButtonContainer">
+        @if (!oldVersion) {
         <button
-          *ngIf="!oldVersion" mat-raised-button
+          mat-raised-button
           color="primary"
           class="generateScheduleButton"
           (click)="generateSchedule()"
-          [disabled]=" !validRange() || nurses.length === 0 || shifts.length === 0 || demandsError">
+          [disabled]="
+            !validRange() ||
+            nurses.length === 0 ||
+            shifts.length === 0 ||
+            demandsError
+          "
+        >
           Generate schedule
         </button>
+        } @if (oldVersion) {
         <button
-          *ngIf="oldVersion" mat-raised-button
+          mat-raised-button
           color="primary"
           class="generateScheduleButton"
           (click)="generateSchedule()"
-          [disabled]=" !validRange() || nurses.length === 0 || shifts.length === 0 || demandsError">
+          [disabled]="
+            !validRange() ||
+            nurses.length === 0 ||
+            shifts.length === 0 ||
+            demandsError
+          "
+        >
           Regenerate schedule
         </button>
-        <button mat-raised-button color="warn" class ="cancelButton" (click)="closeView()">Cancel</button>
+        }
+        <button
+          mat-raised-button
+          color="warn"
+          class="cancelButton"
+          (click)="closeView()"
+        >
+          Cancel
+        </button>
       </div>
     </div>
   </div>
 </div>
-<ng-template #elseBlock>
-  <app-not-connected></app-not-connected>
-</ng-template>
+} @else {
+<app-not-connected></app-not-connected>
+}

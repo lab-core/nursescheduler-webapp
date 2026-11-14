@@ -1,18 +1,24 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, HostListener } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { MAIN_MENU } from 'src/app/constants/app-routes';
-import { Credentials, UserInfo } from 'src/app/models/Credentials';
-import { AccountService } from 'src/app/services/account/account.service';
-import { CacheUtils } from 'src/app/utils/CacheUtils';
-import { ErrorMessageDialogComponent } from '../error-message-dialog/error-message-dialog.component';
+import { HttpErrorResponse } from "@angular/common/http";
+import {
+  Component,
+  HostListener,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { FormControl, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
+import { MAIN_MENU } from "src/app/constants/app-routes";
+import { Credentials, UserInfo } from "src/app/models/Credentials";
+import { AccountService } from "src/app/services/account/account.service";
+import { CacheUtils } from "src/app/utils/CacheUtils";
+import { ErrorMessageDialogComponent } from "../error-message-dialog/error-message-dialog.component";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class LoginComponent {
   username: string;
@@ -20,40 +26,47 @@ export class LoginComponent {
   usernameControlForm: FormControl;
   passwordControlForm: FormControl;
 
-  constructor(private router: Router, private apiService: AccountService, private dialog: MatDialog) {
+  constructor(
+    private router: Router,
+    private apiService: AccountService,
+    private dialog: MatDialog
+  ) {
     this.username = "";
     this.password = "";
     this.usernameControlForm = new FormControl(null, Validators.required);
     this.passwordControlForm = new FormControl(null, Validators.required);
   }
 
-  @HostListener('window:keyup',['$event'])
-  handleKeyEvent(event: KeyboardEvent){
-    if(event.key === 'Enter'){
+  @HostListener("window:keyup", ["$event"])
+  handleKeyEvent(event: KeyboardEvent) {
+    if (event.key === "Enter") {
       this.login();
     }
   }
-  
+
   login() {
     const credentials: Credentials = {
       username: this.username,
       password: this.password,
-    }
+    };
     this.apiService.login(credentials).subscribe({
-      next: (value: UserInfo)=>{
+      next: (value: UserInfo) => {
         CacheUtils.pushUserInfo(value);
-        CacheUtils.setFirstLogin(true)
+        CacheUtils.setFirstLogin(true);
         this.router.navigate(["/" + MAIN_MENU]);
       },
-      error: (err: HttpErrorResponse)=> {
+      error: (err: HttpErrorResponse) => {
         this.dialog.open(ErrorMessageDialogComponent, {
-          data: {message: err.error},
-        })
-      }
-    })
+          data: { message: err.error },
+        });
+      },
+    });
   }
 
-  hasError():boolean{
-    return this.passwordControlForm.hasError('required') || this.usernameControlForm.hasError('required');
+  hasError(): boolean {
+    return (
+      this.passwordControlForm.hasError("required") ||
+      this.usernameControlForm.hasError("required")
+    );
   }
 }

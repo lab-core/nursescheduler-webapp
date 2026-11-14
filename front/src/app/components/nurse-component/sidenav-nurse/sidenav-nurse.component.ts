@@ -1,34 +1,33 @@
-import { Component } from '@angular/core'
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router'
-import { NURSE, NURSE_GROUP} from 'src/app/constants/app-routes';
-import { NURSE_MENU_BUTTONS } from 'src/app/constants/navButton';
+import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
+import { NURSE, NURSE_GROUP } from "src/app/constants/app-routes";
+import { NURSE_MENU_BUTTONS } from "src/app/constants/navButton";
 
 @Component({
-  selector: 'app-sidenav-nurse',
-  templateUrl: './sidenav-nurse.component.html',
-  styleUrls: ['./sidenav-nurse.component.css']
+  selector: "app-sidenav-nurse",
+  templateUrl: "./sidenav-nurse.component.html",
+  styleUrls: ["./sidenav-nurse.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class SidenavNurseComponent {  
-  buttons: string[]
+export class SidenavNurseComponent {
+  buttons: string[];
 
   constructor(public dialog: MatDialog, private router: Router) {
     this.buttons = NURSE_MENU_BUTTONS;
   }
 
-
-    redirect(button: string) {
-      switch (button) {
-        case "Nurse":
-          this.router.navigate(["/" + NURSE]);
-          break;
-        case "Nurse Group":
-            this.router.navigate(["/" + NURSE_GROUP]);
-            break;
-        default:
-          break;
-      }
+  redirect(button: string) {
+    switch (button) {
+      case "Nurse":
+        this.router.navigate(["/" + NURSE]);
+        break;
+      case "Nurse Group":
+        this.router.navigate(["/" + NURSE_GROUP]);
+        break;
+      default:
+        break;
     }
-
-
+  }
 }

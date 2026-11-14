@@ -15,19 +15,15 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatSortModule} from '@angular/material/sort';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatTableModule} from '@angular/material/table';
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatSortModule } from "@angular/material/sort";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatTableModule } from "@angular/material/table";
 
-
-
-
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./components/app-component/app.component";
@@ -36,69 +32,72 @@ import { ConsultScheduleComponent } from "./components/consult-schedule/consult-
 import { ContractCreationComponent } from "./components/contract-component/contract-creation/contract-creation.component";
 import { ScheduleGenerationComponent } from "./components/schedule-generation/schedule-generation.component";
 import { NurseViewComponent } from "./components/nurse-component/nurse-view/nurse-view.component";
-import { HttpClientModule } from "@angular/common/http";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withXhr,
+} from "@angular/common/http";
 import { ErrorMessageDialogComponent } from "./components/error-message-dialog/error-message-dialog.component";
-import { ShiftsViewComponent } from './components/shift-component/shifts-view/shifts-view.component';
-import { ShiftCreationDialogComponent } from './components/shift-component/shift-creation-dialog/shift-creation-dialog.component';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import { ShiftGroupCreationDialogComponent } from './components/shift-component/shift-group-creation-dialog/shift-group-creation-dialog.component';
-import { ShiftTypeCreationDialogComponent } from './components/shift-component/shift-type-creation-dialog/shift-type-creation-dialog.component';
-import { ShiftsTypeViewComponent } from './components/shift-component/shifts-type-view/shifts-type-view.component';
-import { ShiftGroupViewComponent } from './components/shift-component/shifts-group-view/shifts-group-view.component';
-import { SidenavShiftComponent } from './components/shift-component/sidenav-shift/sidenav-shift.component'
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import { WeightComponent } from './components/weight/weight.component';
-import { AlternativeShiftComponent } from './components/alternative-shift/alternative-shift.component';
-import { PatternElementComponent } from './components/pattern-element/pattern-element.component';
+import { ShiftsViewComponent } from "./components/shift-component/shifts-view/shifts-view.component";
+import { ShiftCreationDialogComponent } from "./components/shift-component/shift-creation-dialog/shift-creation-dialog.component";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { ShiftGroupCreationDialogComponent } from "./components/shift-component/shift-group-creation-dialog/shift-group-creation-dialog.component";
+import { ShiftTypeCreationDialogComponent } from "./components/shift-component/shift-type-creation-dialog/shift-type-creation-dialog.component";
+import { ShiftsTypeViewComponent } from "./components/shift-component/shifts-type-view/shifts-type-view.component";
+import { ShiftGroupViewComponent } from "./components/shift-component/shifts-group-view/shifts-group-view.component";
+import { SidenavShiftComponent } from "./components/shift-component/sidenav-shift/sidenav-shift.component";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { WeightComponent } from "./components/weight/weight.component";
+import { AlternativeShiftComponent } from "./components/alternative-shift/alternative-shift.component";
+import { PatternElementComponent } from "./components/pattern-element/pattern-element.component";
 import { UnwantedPatternsComponent } from "./components/unwanted-patterns/unwanted-patterns.component";
 import { NumericInputComponent } from "./components/numeric-input/numeric-input.component";
 import { TestingComponent } from "./components/testing/testing.component";
 import { IntegerConstraintComponent } from "./components/integer-constraint/integer-constraint.component";
-import { ShiftConstraintComponent } from './components/shift-constraint/shift-constraint.component';
-import { MinMaxConsecutiveShiftComponent } from './components/min-max-consecutive-shift/min-max-consecutive-shift.component';
+import { ShiftConstraintComponent } from "./components/shift-constraint/shift-constraint.component";
+import { MinMaxConsecutiveShiftComponent } from "./components/min-max-consecutive-shift/min-max-consecutive-shift.component";
 import { BooleanConstraintComponent } from "./components/boolean-constraint/boolean-constraint.component";
-import { SidenavNurseComponent } from './components/nurse-component/sidenav-nurse/sidenav-nurse.component';
-import { NurseCreationDialogComponent } from './components/nurse-component/nurse-creation-dialog/nurse-creation-dialog.component';
-import { NurseGroupCreationDialogComponent } from './components/nurse-component/nurse-group-creation-dialog/nurse-group-creation-dialog.component';
-import { NurseGroupViewComponent } from './components/nurse-component/nurse-group-view/nurse-group-view.component';
-import { MatMenuModule} from '@angular/material/menu';
-import {MatCardModule} from '@angular/material/card';
+import { SidenavNurseComponent } from "./components/nurse-component/sidenav-nurse/sidenav-nurse.component";
+import { NurseCreationDialogComponent } from "./components/nurse-component/nurse-creation-dialog/nurse-creation-dialog.component";
+import { NurseGroupCreationDialogComponent } from "./components/nurse-component/nurse-group-creation-dialog/nurse-group-creation-dialog.component";
+import { NurseGroupViewComponent } from "./components/nurse-component/nurse-group-view/nurse-group-view.component";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatCardModule } from "@angular/material/card";
 
-
-import { ContractCreationDialogComponent } from './components/contract-component/contract-creation-dialog/contract-creation-dialog.component';
-import { MinMaxConstraintComponent } from './components/min-max-constraint/min-max-constraint.component';
-import { ContractsViewComponent } from './components/contract-component/contracts-view/contracts-view.component';
-import { LoginComponent } from './components/login/login.component';
-import { AccountCreationComponent } from './components/account-creation/account-creation.component';
-import { AccountCreationDialogComponent } from './components/account-creation/account-creation-dialog/account-creation-dialog.component';
-import { HeaderComponent } from './components/header/header.component';
-import { NotConnectedComponent } from './components/not-connected/not-connected.component';
-import { ShiftCreationComponent } from './components/shift-component/shift-creation/shift-creation.component';
-import { ShiftTypeCreationComponent } from './components/shift-component/shift-type-creation/shift-type-creation.component';
-import { UnwantedSkillsComponent } from './components/unwanted-skills/unwanted-skills.component';
-import { CreateProfileDialogComponent } from './components/create-profile-dialog/create-profile-dialog.component';
-import { CreateEmptyProfileDialogComponent } from './components/create-profile-dialog/create-empty-profile-dialog/create-empty-profile-dialog.component';
-import { ImportProfileComponent } from './components/create-profile-dialog/import-profile-dialog/import-profile-dialog.component';
-import { DuplicateProfileComponent } from './components/create-profile-dialog/duplicate-profile/duplicate-profile.component';
-import { ShareProfileComponent } from './components/create-profile-dialog/share-profile/share-profile.component';
-import { ShiftGroupCreationComponent } from './components/shift-component/shift-group-creation/shift-group-creation.component';
-import { SkillViewComponent } from './components/skill-view/skill-view.component';
-import { SkillCreationDialogComponent } from './components/skill-creation-dialog/skill-creation-dialog.component';
-import { SkillCreationComponent } from './components/skill-creation/skill-creation.component';
-import { NurseCreationComponent } from './components/nurse-component/nurse-creation/nurse-creation.component';
-import { NurseGroupCreationComponent } from './components/nurse-component/nurse-group-creation/nurse-group-creation.component';
-import { MinMaxHopspitalDemandComponent } from './components/min-max-hopspital-demand/min-max-hopspital-demand.component';
-import { HopspitalDemandCreationComponent } from './components/hopspital-demand-creation/hopspital-demand-creation.component';
-import { NursePreferenceComponent } from './components/nurse-preference/nurse-preference.component';
-import { ContractGroupCreationComponent } from './components/contract-component/contract-group-creation/contract-group-creation.component';
-import { ContractGroupCreationDialogComponent } from './components/contract-component/contract-group-creation-dialog/contract-group-creation-dialog.component';
-import { ButtonMultiselectComponent } from './components/button-multiselect/button-multiselect.component';
-import { SidenavContractComponent } from './components/contract-component/sidenav-contract/sidenav-contract.component';
-import { ContractsGroupViewComponent } from './components/contract-component/contracts-group-view/contracts-group-view.component';
-import { SchedulesGalleryComponent } from './components/schedules-gallery/schedule-view.component';
-import { NurseHistoryComponent } from './components/nurse-history/nurse-history.component';
-import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import { ReportDialogComponent } from './components/report-dialog/report-dialog.component';
+import { ContractCreationDialogComponent } from "./components/contract-component/contract-creation-dialog/contract-creation-dialog.component";
+import { MinMaxConstraintComponent } from "./components/min-max-constraint/min-max-constraint.component";
+import { ContractsViewComponent } from "./components/contract-component/contracts-view/contracts-view.component";
+import { LoginComponent } from "./components/login/login.component";
+import { AccountCreationComponent } from "./components/account-creation/account-creation.component";
+import { AccountCreationDialogComponent } from "./components/account-creation/account-creation-dialog/account-creation-dialog.component";
+import { HeaderComponent } from "./components/header/header.component";
+import { NotConnectedComponent } from "./components/not-connected/not-connected.component";
+import { ShiftCreationComponent } from "./components/shift-component/shift-creation/shift-creation.component";
+import { ShiftTypeCreationComponent } from "./components/shift-component/shift-type-creation/shift-type-creation.component";
+import { UnwantedSkillsComponent } from "./components/unwanted-skills/unwanted-skills.component";
+import { CreateProfileDialogComponent } from "./components/create-profile-dialog/create-profile-dialog.component";
+import { CreateEmptyProfileDialogComponent } from "./components/create-profile-dialog/create-empty-profile-dialog/create-empty-profile-dialog.component";
+import { ImportProfileComponent } from "./components/create-profile-dialog/import-profile-dialog/import-profile-dialog.component";
+import { DuplicateProfileComponent } from "./components/create-profile-dialog/duplicate-profile/duplicate-profile.component";
+import { ShareProfileComponent } from "./components/create-profile-dialog/share-profile/share-profile.component";
+import { ShiftGroupCreationComponent } from "./components/shift-component/shift-group-creation/shift-group-creation.component";
+import { SkillViewComponent } from "./components/skill-view/skill-view.component";
+import { SkillCreationDialogComponent } from "./components/skill-creation-dialog/skill-creation-dialog.component";
+import { SkillCreationComponent } from "./components/skill-creation/skill-creation.component";
+import { NurseCreationComponent } from "./components/nurse-component/nurse-creation/nurse-creation.component";
+import { NurseGroupCreationComponent } from "./components/nurse-component/nurse-group-creation/nurse-group-creation.component";
+import { MinMaxHopspitalDemandComponent } from "./components/min-max-hopspital-demand/min-max-hopspital-demand.component";
+import { HopspitalDemandCreationComponent } from "./components/hopspital-demand-creation/hopspital-demand-creation.component";
+import { NursePreferenceComponent } from "./components/nurse-preference/nurse-preference.component";
+import { ContractGroupCreationComponent } from "./components/contract-component/contract-group-creation/contract-group-creation.component";
+import { ContractGroupCreationDialogComponent } from "./components/contract-component/contract-group-creation-dialog/contract-group-creation-dialog.component";
+import { ButtonMultiselectComponent } from "./components/button-multiselect/button-multiselect.component";
+import { SidenavContractComponent } from "./components/contract-component/sidenav-contract/sidenav-contract.component";
+import { ContractsGroupViewComponent } from "./components/contract-component/contracts-group-view/contracts-group-view.component";
+import { SchedulesGalleryComponent } from "./components/schedules-gallery/schedule-view.component";
+import { NurseHistoryComponent } from "./components/nurse-history/nurse-history.component";
+import { ConfirmationDialogComponent } from "./components/confirmation-dialog/confirmation-dialog.component";
+import { ReportDialogComponent } from "./components/report-dialog/report-dialog.component";
 
 @NgModule({
   declarations: [
@@ -170,6 +169,8 @@ import { ReportDialogComponent } from './components/report-dialog/report-dialog.
     ConfirmationDialogComponent,
     ReportDialogComponent,
   ],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -184,12 +185,10 @@ import { ReportDialogComponent } from './components/report-dialog/report-dialog.
     MatIconModule,
     MatSelectModule,
     MatButtonModule,
-    HttpClientModule,
     MatChipsModule,
     MatDialogModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
-    NgxMaterialTimepickerModule,
     MatExpansionModule,
     MatTooltipModule,
     MatMenuModule,
@@ -209,8 +208,6 @@ import { ReportDialogComponent } from './components/report-dialog/report-dialog.
     MatDividerModule,
     MatButtonToggleModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [provideHttpClient(withXhr(), withInterceptorsFromDi())],
 })
 export class AppModule {}

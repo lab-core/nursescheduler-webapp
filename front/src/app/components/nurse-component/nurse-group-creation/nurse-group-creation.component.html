@@ -13,25 +13,28 @@
           (keyup)="emitNurseGroup()"
         />
       </mat-form-field>
-      <mat-error *ngIf="nameExist() && nurseGroupStartname === ''"
-        >Nurse group name is already used</mat-error
-      >
+      @if (nameExist() && nurseGroupStartname === '') {
+      <mat-error>Nurse group name is already used</mat-error>
+      }
     </div>
   </div>
   <div class="nurseSection">
     <h2 class="NurseSectionTitle">Nurses</h2>
     <hr />
     <div class="formContainer">
-      <div *ngIf="localNurses.length > 0">
+      @if (localNurses.length > 0) {
+      <div>
         <mat-form-field appearance="fill">
           <mat-label>Select a nurse</mat-label>
           <mat-select
             [(value)]="selectedNurse"
             (selectionChange)="emitNurseGroup()"
           >
-            <mat-option *ngFor="let nurse of localNurses" [value]="nurse">
+            @for (nurse of localNurses; track nurse) {
+            <mat-option [value]="nurse">
               {{ nurse }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <button
@@ -43,8 +46,10 @@
           add nurse
         </button>
       </div>
+      }
       <table class="nurseTable">
-        <th *ngFor="let nurse of nurseGroup.nurses">
+        @for (nurse of nurseGroup.nurses; track nurse) {
+        <th>
           <div class="table-element-container flex-row-center-container">
             <td class="nurseName">
               {{ nurse }}
@@ -54,6 +59,7 @@
             </button>
           </div>
         </th>
+        }
       </table>
     </div>
   </div>
@@ -62,19 +68,19 @@
     <h2 class="contractSectionTitle">Contracts</h2>
     <hr />
     <div class="formContainer">
-      <div *ngIf="localContracts.length > 0">
+      @if (localContracts.length > 0) {
+      <div>
         <mat-form-field appearance="fill">
           <mat-label>Select a contract</mat-label>
           <mat-select
             [(value)]="selectedContract"
             (selectionChange)="emitNurseGroup()"
           >
-            <mat-option
-              *ngFor="let contract of localContracts"
-              [value]="contract"
-            >
+            @for (contract of localContracts; track contract) {
+            <mat-option [value]="contract">
               {{ contract }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <button
@@ -86,8 +92,10 @@
           add contract
         </button>
       </div>
+      }
       <table class="contractTable">
-        <th *ngFor="let contract of nurseGroup.contracts">
+        @for (contract of nurseGroup.contracts; track contract) {
+        <th>
           <div class="table-element-container flex-row-center-container">
             <td class="contractName">
               {{ contract }}
@@ -97,6 +105,7 @@
             </button>
           </div>
         </th>
+        }
       </table>
     </div>
   </div>
@@ -104,19 +113,19 @@
     <h2 class="contractSectionTitle">Group Contracts</h2>
     <hr />
     <div class="formContainer">
-      <div *ngIf="localContractGroups.length > 0">
+      @if (localContractGroups.length > 0) {
+      <div>
         <mat-form-field appearance="fill">
           <mat-label>Select a group contract</mat-label>
           <mat-select
             [(ngModel)]="selectedContractGroup"
             (selectionChange)="emitNurseGroup()"
           >
-            <mat-option
-              *ngFor="let contractGroup of localContractGroups"
-              [value]="contractGroup"
-            >
+            @for (contractGroup of localContractGroups; track contractGroup) {
+            <mat-option [value]="contractGroup">
               {{ contractGroup }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <button
@@ -128,8 +137,11 @@
           add group contract
         </button>
       </div>
+      }
       <table class="contractGroupTable">
-        <th *ngFor="let contractGroup of nurseGroup.contract_groups">
+        @for (contractGroup of nurseGroup.contract_groups; track contractGroup)
+        {
+        <th>
           <div class="table-element-container flex-row-center-container">
             <td class="contractGroupName">
               {{ contractGroup }}
@@ -142,6 +154,7 @@
             </button>
           </div>
         </th>
+        }
       </table>
     </div>
   </div>

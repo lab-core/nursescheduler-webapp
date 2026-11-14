@@ -1,59 +1,60 @@
 <div mat-dialog-title class="title">Create New Account</div>
-<div  mat-dialog-content class="dialog-content">
-    <div class="userInputContainer">
-        <h2>Username</h2>
-        <hr>
-        <mat-form-field
-            class="inputField"
-        >
-        <mat-label>Enter username</mat-label>
-        <input
-            matInput
-            placeholder="username"
-            [formControl]="usernameControlForm"
-            [(ngModel)]="username"
-        />
-        </mat-form-field>
-    </div>
-    <div class="passwordInputContainer">
-        <h2>Password</h2>
-        <hr>
-        <mat-form-field
-            class="inputField"
-        >
-        <mat-label>Enter password</mat-label>
-        <input
-            matInput
-            type="password"
-            placeholder="password"
-            [formControl]="passwordControlForm"
-            [(ngModel)]="password"
-        />
-        </mat-form-field>
-    </div>
-    <div class="passwordConfirmationInputContainer">
-        <h2>Confirm Password</h2>
-        <hr>
-        <mat-form-field
-            class="inputField"
-        >
-        <mat-label>Enter password</mat-label>
-        <input
-            matInput
-            type="password"
-            placeholder="password"
-            [formControl]="passwordConfirmationControlForm"
-            [(ngModel)]="passwordConfirmation"
-        />
-        </mat-form-field>
-        <mat-error *ngIf="confirmPassword()">{{getErrorMessage()}}</mat-error>
-    </div>
+<div mat-dialog-content class="dialog-content">
+  <div class="userInputContainer">
+    <h2>Username</h2>
+    <hr />
+    <mat-form-field class="inputField">
+      <mat-label>Enter username</mat-label>
+      <input
+        matInput
+        placeholder="username"
+        [formControl]="usernameControlForm"
+        [(ngModel)]="username"
+      />
+    </mat-form-field>
+  </div>
+  <div class="passwordInputContainer">
+    <h2>Password</h2>
+    <hr />
+    <mat-form-field class="inputField">
+      <mat-label>Enter password</mat-label>
+      <input
+        matInput
+        type="password"
+        placeholder="password"
+        [formControl]="passwordControlForm"
+        [(ngModel)]="password"
+      />
+    </mat-form-field>
+  </div>
+  <div class="passwordConfirmationInputContainer">
+    <h2>Confirm Password</h2>
+    <hr />
+    <mat-form-field class="inputField">
+      <mat-label>Enter password</mat-label>
+      <input
+        matInput
+        type="password"
+        placeholder="password"
+        [formControl]="passwordConfirmationControlForm"
+        [(ngModel)]="passwordConfirmation"
+      />
+    </mat-form-field>
+    @if (confirmPassword()) {
+    <mat-error>{{ getErrorMessage() }}</mat-error>
+    }
+  </div>
 </div>
 <div mat-dialog-action class="buttons-container">
-    <button  mat-raised-button [disabled]="hasError()" color="primary"  (click)="createAccount()">
-        Create
-    </button>
-    <button mat-raised-button color="warn" [mat-dialog-close]="true">
-        Cancel
-    </button>
+  <button
+    mat-raised-button
+    [disabled]="hasError()"
+    color="primary"
+    (click)="createAccount()"
+  >
+    Create
+  </button>
+  <button mat-raised-button color="warn" [mat-dialog-close]="true">
+    Cancel
+  </button>
 </div>

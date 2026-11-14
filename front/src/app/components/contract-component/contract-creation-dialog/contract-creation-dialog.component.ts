@@ -1,22 +1,32 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Contract } from 'src/app/models/Contract';
-import { ContractService } from 'src/app/services/contract/contract.service';
-import { ShiftGroupService } from 'src/app/services/shift/shift-group.service';
-import { ShiftTypeService } from 'src/app/services/shift/shift-type.service';
-import { ShiftService } from 'src/app/services/shift/shift.service';
-import { SkillService } from 'src/app/services/shift/skill.service';
-import { Exception } from 'src/app/utils/Exception';
-import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-message-dialog.component';
+import { HttpErrorResponse, HttpStatusCode } from "@angular/common/http";
+import {
+  Component,
+  Inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
+import { Contract } from "src/app/models/Contract";
+import { ContractService } from "src/app/services/contract/contract.service";
+import { ShiftGroupService } from "src/app/services/shift/shift-group.service";
+import { ShiftTypeService } from "src/app/services/shift/shift-type.service";
+import { ShiftService } from "src/app/services/shift/shift.service";
+import { SkillService } from "src/app/services/shift/skill.service";
+import { Exception } from "src/app/utils/Exception";
+import { ErrorMessageDialogComponent } from "../../error-message-dialog/error-message-dialog.component";
 
 @Component({
-  selector: 'app-contract-creation-dialog',
-  templateUrl: './contract-creation-dialog.component.html',
-  styleUrls: ['./contract-creation-dialog.component.css']
+  selector: "app-contract-creation-dialog",
+  templateUrl: "./contract-creation-dialog.component.html",
+  styleUrls: ["./contract-creation-dialog.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class ContractCreationDialogComponent implements OnInit{
-
+export class ContractCreationDialogComponent implements OnInit {
   contractErrorState: boolean;
   possibleShifts!: string[];
   shiftsLoaded: boolean;
@@ -29,11 +39,15 @@ export class ContractCreationDialogComponent implements OnInit{
 
   constructor(
     public dialogRef: MatDialogRef<ContractCreationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data : {contract: Contract, contractList: string[]},
-    private service: ContractService, private shiftGroupService: ShiftGroupService,
-    private dialog: MatDialog, private shiftService: ShiftService,
-    private shiftTypeService: ShiftTypeService, private skillService: SkillService
-  ){
+    @Inject(MAT_DIALOG_DATA)
+    public data: { contract: Contract; contractList: string[] },
+    private service: ContractService,
+    private shiftGroupService: ShiftGroupService,
+    private dialog: MatDialog,
+    private shiftService: ShiftService,
+    private shiftTypeService: ShiftTypeService,
+    private skillService: SkillService
+  ) {
     this.contractErrorState = true;
     this.service.setContract(data.contract);
     this.shiftsLoaded = false;
@@ -44,108 +58,102 @@ export class ContractCreationDialogComponent implements OnInit{
   }
   ngOnInit(): void {
     this.possibleShifts = [];
-    try{
+    try {
       this.shiftService.getShiftNames().subscribe({
-        next: (shifts: string[])=>{
-          shifts.forEach((shift: string)=>{
+        next: (shifts: string[]) => {
+          shifts.forEach((shift: string) => {
             this.possibleShifts.push(shift);
-          })
+          });
           this.shiftsLoaded = true;
         },
-        error: (error: HttpErrorResponse)=>{
+        error: (error: HttpErrorResponse) => {
           this.openErrorDialog(error.error);
-        }
-      })
+        },
+      });
 
       this.shiftTypeService.getShiftTypeNames().subscribe({
-        next: (shifts: string[])=>{
-          shifts.forEach((shift: string)=>{
+        next: (shifts: string[]) => {
+          shifts.forEach((shift: string) => {
             this.possibleShifts.push(shift);
-          })
+          });
           this.shiftTypesLoaded = true;
         },
-        error: (error: HttpErrorResponse)=>{
+        error: (error: HttpErrorResponse) => {
           this.openErrorDialog(error.error);
-        }
-      })
+        },
+      });
 
       this.shiftGroupService.getShiftGroupNames().subscribe({
-        next: (shifts: string[])=>{
-          shifts.forEach((shift: string)=>{
+        next: (shifts: string[]) => {
+          shifts.forEach((shift: string) => {
             this.possibleShifts.push(shift);
-          })
+          });
           this.shiftGroupsLoaded = true;
         },
-        error: (error: HttpErrorResponse)=>{
+        error: (error: HttpErrorResponse) => {
           this.openErrorDialog(error.error);
-        }
-      })
+        },
+      });
 
       this.skillService.getAllSkills().subscribe({
-        next:(skills: string[])=>{
-          skills.forEach((skill: string)=>{
+        next: (skills: string[]) => {
+          skills.forEach((skill: string) => {
             this.possibleSkills.push(skill);
-          })
-          this.skillsLoaded = true
+          });
+          this.skillsLoaded = true;
         },
-        error: (error: HttpErrorResponse)=>{
+        error: (error: HttpErrorResponse) => {
           this.openErrorDialog(error.error);
-        }
-      })
-      
-    }catch(err){
+        },
+      });
+    } catch (err) {
       //Do nothing
     }
   }
 
   submit() {
-    try
-    {
-      this.service.setContract(this.data.contract)
+    try {
+      this.service.setContract(this.data.contract);
       this.service.validateContract();
       //call api service to push the contract
       const contractJson = this.service.getJson();
       console.log(contractJson);
-      if(this.initName === ""){
+      if (this.initName === "") {
         this.service.addContract(contractJson).subscribe({
-          error: (err: HttpErrorResponse)=> {
-            if(err.status === HttpStatusCode.Ok) {
+          error: (err: HttpErrorResponse) => {
+            if (err.status === HttpStatusCode.Ok) {
               this.close();
+            } else {
+              this.openErrorDialog(err.error);
             }
-            else{
-              this.openErrorDialog(err.error)
-            }
-          } 
-        })
-      }
-      else {
+          },
+        });
+      } else {
         this.service.updateContract(contractJson).subscribe({
-          error: (err: HttpErrorResponse)=> {
-            if(err.status === HttpStatusCode.Ok) {
+          error: (err: HttpErrorResponse) => {
+            if (err.status === HttpStatusCode.Ok) {
               this.close();
+            } else {
+              this.openErrorDialog(err.error);
             }
-            else{
-              this.openErrorDialog(err.error)
-            }
-          }
-        })
-      } 
-    }
-    catch(e){
-      this.openErrorDialog((e as Exception).getMessage())
+          },
+        });
+      }
+    } catch (e) {
+      this.openErrorDialog((e as Exception).getMessage());
     }
   }
 
   openErrorDialog(message: string) {
     this.dialog.open(ErrorMessageDialogComponent, {
-      height: '45%',
-      width: '45%', 
-      position: {top:'20vh',left: '30%', right: '25%'},
-      data: {message: message},
-    })
+      height: "45%",
+      width: "45%",
+      position: { top: "20vh", left: "30%", right: "25%" },
+      data: { message: message },
+    });
   }
 
-  close(){
+  close() {
     this.dialogRef.close();
   }
 

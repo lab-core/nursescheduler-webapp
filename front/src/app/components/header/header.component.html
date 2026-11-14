@@ -1,75 +1,153 @@
-<div *ngIf="validProfile" class="header-container">
-    <div class="navigation-container">
-        <button mat-icon-button [matMenuTriggerFor]="navigationMenu">
-            <mat-icon class="menu-icon">menu</mat-icon>
-        </button>
-        <mat-menu #navigationMenu="matMenu">
-            <button mat-menu-item routerLink="/main-menu"><mat-icon id="home-icon">home</mat-icon><span class="blue-string">Home</span></button>
-            <button mat-menu-item routerLink="/schedules"><img src="../../assets/calendar.png"/><span class="blue-string">Schedules</span></button>
-            <button mat-menu-item routerLink="/contracts"><img src="../../assets/contract.png"/><span class="blue-string">Contracts</span></button>
-            <button mat-menu-item routerLink="/nurse"><img src="../../assets/identification.png"/><span class="blue-string">Nurses</span></button>
-            <button mat-menu-item routerLink="/shift"><img src="../../assets/time.png"/><span class="blue-string">Shifts & Skills</span></button>
-        </mat-menu>
-        <span><h1 routerLink="/main-menu">Nurse scheduler</h1></span>
-    </div>
-    <div class="profile-container" *ngIf='showProfile'>
-        <!-- <label class="profile-label">Profile: </label> -->
-        <mat-form-field class="profile-dropdown" appearance="fill">
-            <mat-label>Hospital Profile</mat-label>
-            <mat-select *ngIf="enableProfileSwitch" [(value)]="profile" (selectionChange)="handleSelectionChange()">
-                <mat-option *ngFor="let profile of profiles" [value]="profile">
-                    {{profile.profile}}
-                </mat-option>
-            </mat-select>
-            <mat-select *ngIf="!enableProfileSwitch" [(value)]="profile" (selectionChange)="handleSelectionChange()" [disabled]='true'>
-                <mat-option *ngFor="let profile of profiles" [value]="profile">
-                    {{profile.profile}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button *ngIf="enableProfileSwitch" mat-icon-button [matMenuTriggerFor]="profileMenu" aria-label="Example icon-button with a menu">
-            <mat-icon>more_vert</mat-icon>
-        </button>
-          <mat-menu #profileMenu="matMenu">
-            <button mat-menu-item (click)="openCreateProfileDialog(true)"><mat-icon class="blue-string">library_add</mat-icon><span class="blue-string"> Create new profile</span></button>
-            <button mat-menu-item (click)="duplicate()"><mat-icon class="blue-string">file_copy</mat-icon><span class="blue-string">Duplicate</span></button>
-            <button mat-menu-item *ngIf="profile.creator === username" (click)="deleteProfile()"><mat-icon class="blue-string">delete</mat-icon><span class="blue-string">Remove</span></button>
-            <button mat-menu-item (click)="share()"><mat-icon class="blue-string">share</mat-icon><span class="blue-string">Share</span></button>
-            <button mat-menu-item (click)="export()"><mat-icon class="blue-string">cloud_download</mat-icon><span class="blue-string">Export</span></button>
-          </mat-menu>
-    </div>
-    <div class="end-buttons">
-        <div class="icon-box">
-            <button mat-icon-button [matMenuTriggerFor]="notificationsMenu" class="bell-icon" (click)="updateNewNotificationState()">
-                <mat-icon *ngIf="newNotificationAdded; else noNotification">notifications_active</mat-icon>
-                <ng-template #noNotification>
-                    <mat-icon>notifications</mat-icon>
-                </ng-template>
-            </button>
-            <mat-menu #notificationsMenu="matMenu">
-                <div *ngIf="notifications.length>0; else nothingToShow" > 
-                <button mat-menu-item *ngFor="let sol of notifications" (click)="viewSchedule(sol)">The schedule {{sol.startDate}}-{{sol.endDate}}-v{{sol.version}} is {{sol.state}}</button>
-                 </div>
-                <ng-template #nothingToShow>
-                    <mat-menu-item id="nothing-to-show">You don't have any notifications!</mat-menu-item>
-                </ng-template>
-            </mat-menu>
+@if (validProfile) {
+<div class="header-container">
+  <div class="navigation-container">
+    <button mat-icon-button [matMenuTriggerFor]="navigationMenu">
+      <mat-icon class="menu-icon">menu</mat-icon>
+    </button>
+    <mat-menu #navigationMenu="matMenu">
+      <button mat-menu-item routerLink="/main-menu">
+        <mat-icon id="home-icon">home</mat-icon
+        ><span class="blue-string">Home</span>
+      </button>
+      <button mat-menu-item routerLink="/schedules">
+        <img src="../../assets/calendar.png" /><span class="blue-string"
+          >Schedules</span
+        >
+      </button>
+      <button mat-menu-item routerLink="/contracts">
+        <img src="../../assets/contract.png" /><span class="blue-string"
+          >Contracts</span
+        >
+      </button>
+      <button mat-menu-item routerLink="/nurse">
+        <img src="../../assets/identification.png" /><span class="blue-string"
+          >Nurses</span
+        >
+      </button>
+      <button mat-menu-item routerLink="/shift">
+        <img src="../../assets/time.png" /><span class="blue-string"
+          >Shifts & Skills</span
+        >
+      </button>
+    </mat-menu>
+    <span><h1 routerLink="/main-menu">Nurse scheduler</h1></span>
+  </div>
+  @if (showProfile) {
+  <div class="profile-container">
+    <!-- <label class="profile-label">Profile: </label> -->
+    <mat-form-field class="profile-dropdown" appearance="fill">
+      <mat-label>Hospital Profile</mat-label>
+      @if (enableProfileSwitch) {
+      <mat-select
+        [(value)]="profile"
+        (selectionChange)="handleSelectionChange()"
+      >
+        @for (profile of profiles; track profile) {
+        <mat-option [value]="profile">
+          {{ profile.profile }}
+        </mat-option>
+        }
+      </mat-select>
+      } @if (!enableProfileSwitch) {
+      <mat-select
+        [(value)]="profile"
+        (selectionChange)="handleSelectionChange()"
+        [disabled]="true"
+      >
+        @for (profile of profiles; track profile) {
+        <mat-option [value]="profile">
+          {{ profile.profile }}
+        </mat-option>
+        }
+      </mat-select>
+      }
+    </mat-form-field>
+    @if (enableProfileSwitch) {
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="profileMenu"
+      aria-label="Example icon-button with a menu"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    }
+    <mat-menu #profileMenu="matMenu">
+      <button mat-menu-item (click)="openCreateProfileDialog(true)">
+        <mat-icon class="blue-string">library_add</mat-icon
+        ><span class="blue-string"> Create new profile</span>
+      </button>
+      <button mat-menu-item (click)="duplicate()">
+        <mat-icon class="blue-string">file_copy</mat-icon
+        ><span class="blue-string">Duplicate</span>
+      </button>
+      @if (profile.creator === username) {
+      <button mat-menu-item (click)="deleteProfile()">
+        <mat-icon class="blue-string">delete</mat-icon
+        ><span class="blue-string">Remove</span>
+      </button>
+      }
+      <button mat-menu-item (click)="share()">
+        <mat-icon class="blue-string">share</mat-icon
+        ><span class="blue-string">Share</span>
+      </button>
+      <button mat-menu-item (click)="export()">
+        <mat-icon class="blue-string">cloud_download</mat-icon
+        ><span class="blue-string">Export</span>
+      </button>
+    </mat-menu>
+  </div>
+  }
+  <div class="end-buttons">
+    <div class="icon-box">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="notificationsMenu"
+        class="bell-icon"
+        (click)="updateNewNotificationState()"
+      >
+        @if (newNotificationAdded) {
+        <mat-icon>notifications_active</mat-icon>
+        } @else {
+        <mat-icon>notifications</mat-icon>
+        }
+      </button>
+      <mat-menu #notificationsMenu="matMenu">
+        @if (notifications.length>0) {
+        <div>
+          @for (sol of notifications; track sol) {
+          <button mat-menu-item (click)="viewSchedule(sol)">
+            The schedule {{ sol.startDate }}-{{ sol.endDate }}-v{{
+              sol.version
+            }}
+            is {{ sol.state }}
+          </button>
+          }
         </div>
-        <div class="icon-box">
-            <button class="user-icon" mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>account_circle</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" class="account-dropdown">
-                <button mat-menu-item (click)="logout()">
-                    <mat-icon class="blue-string">logout</mat-icon>
-                    <span class="blue-string">Logout</span>
-                </button>
-                <button *ngIf="isAdmin" mat-menu-item (click)="goToCreateAccount()">
-                    <mat-icon class="blue-string">person_add</mat-icon>
-                    <span class="blue-string"> Create new user</span>
-                </button>
-            </mat-menu>
-        </div>    
+        } @else {
+        <mat-menu-item id="nothing-to-show"
+          >You don't have any notifications!</mat-menu-item
+        >
+        }
+      </mat-menu>
     </div>
-    <!--<ng-template #elseBlock></ng-template>-->
+    <div class="icon-box">
+      <button class="user-icon" mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="account-dropdown">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon class="blue-string">logout</mat-icon>
+          <span class="blue-string">Logout</span>
+        </button>
+        @if (isAdmin) {
+        <button mat-menu-item (click)="goToCreateAccount()">
+          <mat-icon class="blue-string">person_add</mat-icon>
+          <span class="blue-string"> Create new user</span>
+        </button>
+        }
+      </mat-menu>
+    </div>
+  </div>
+  <!--<ng-template #elseBlock></ng-template>-->
 </div>
+}

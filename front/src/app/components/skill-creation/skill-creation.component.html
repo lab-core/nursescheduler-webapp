@@ -1,12 +1,19 @@
 <div class="skill-container" (mouseleave)="emitSkill()"></div>
-  <div class="name-section" >
-    <h2>Skill Name</h2>
-    <hr>
-    <div class="nameForm">
-      <mat-form-field class="nameField" appearance="fill">
-        <mat-label>Enter skill name</mat-label>
-        <input matInput [(ngModel)]="skill.name" [formControl]="nameSkillFormCtrl" (keyup)="emitSkill()">
-      </mat-form-field>
-      <mat-error *ngIf="nameExist() && skillStartName === ''">Skill name is already used</mat-error>
-    </div>
+<div class="name-section">
+  <h2>Skill Name</h2>
+  <hr />
+  <div class="nameForm">
+    <mat-form-field class="nameField" appearance="fill">
+      <mat-label>Enter skill name</mat-label>
+      <input
+        matInput
+        [(ngModel)]="skill.name"
+        [formControl]="nameSkillFormCtrl"
+        (keyup)="emitSkill()"
+      />
+    </mat-form-field>
+    @if (nameExist() && skillStartName === '') {
+    <mat-error>Skill name is already used</mat-error>
+    }
   </div>
+</div>

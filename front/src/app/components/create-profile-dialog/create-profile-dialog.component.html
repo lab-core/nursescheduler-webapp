@@ -4,17 +4,15 @@
   </mat-card>
 
   <mat-card class="info-container">
-    <div
-      *ngIf="data.profiles.length === 0; else elseBlock"
-      class="text-container"
-    >
+    @if (data.profiles.length === 0) {
+    <div class="text-container">
       <h1>Welcome to Nurse Scheduler application!</h1>
       <h3>Create or import a hospital profile to get started</h3>
-  </div>
+    </div>
+    } @else {
+    <h1>Create or import a hospital profile to get started</h1>
+    }
 
-    <ng-template #elseBlock class="text-container">
-      <h1>Create or import a hospital profile to get started</h1>
-    </ng-template>
     <div class="button-container">
       <div class="create-empty-section">
         <button
@@ -42,14 +40,15 @@
         </button>
       </div>
     </div>
+    @if (data.closeDisplayed) {
     <button
       mat-raised-button
-      *ngIf="data.closeDisplayed"
       class="close-button"
       color="warn"
       [mat-dialog-close]="true"
     >
       Close
     </button>
+    }
   </mat-card>
 </div>

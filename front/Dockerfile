@@ -1,6 +1,6 @@
 # use a node image as the base image and name it 'build' for
 # later reference
-FROM node:20-alpine as build
+FROM node:24-alpine AS build
 
 # set the working directory to /app
 WORKDIR /app

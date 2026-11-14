@@ -13,25 +13,28 @@
           (keyup)="emitShiftGroup()"
         />
       </mat-form-field>
-      <mat-error *ngIf="nameExist() && shiftGroupStartName === ''"
-        >Shift group name is already used</mat-error
-      >
+      @if (nameExist() && shiftGroupStartName === '') {
+      <mat-error>Shift group name is already used</mat-error>
+      }
     </div>
   </div>
   <div class="shiftSection">
     <h2 class="shiftSectionTitle">Shifts</h2>
     <hr />
     <div class="formContainer">
-      <div *ngIf="localShifts.length > 0">
+      @if (localShifts.length > 0) {
+      <div>
         <mat-form-field appearance="fill">
           <mat-label>Select a shift</mat-label>
           <mat-select
             [(value)]="selectedShift"
             (selectionChanged)="emitShiftGroup()"
           >
-            <mat-option *ngFor="let shift of localShifts" [value]="shift">
+            @for (shift of localShifts; track shift) {
+            <mat-option [value]="shift">
               {{ shift }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <button
@@ -43,8 +46,10 @@
           add Shift
         </button>
       </div>
+      }
       <table class="shiftTable">
-        <th *ngFor="let shift of shiftGroup.shifts">
+        @for (shift of shiftGroup.shifts; track shift) {
+        <th>
           <div class="table-element-container flex-row-center-container">
             <td class="shiftName">
               {{ shift }}
@@ -54,6 +59,7 @@
             </button>
           </div>
         </th>
+        }
       </table>
     </div>
   </div>
@@ -61,19 +67,19 @@
     <h2 class="shiftTypeSectionTitle">Shifts Type</h2>
     <hr />
     <div class="formContainer">
-      <div *ngIf="localShiftTypes.length > 0">
+      @if (localShiftTypes.length > 0) {
+      <div>
         <mat-form-field appearance="fill">
           <mat-label>Select a shift type</mat-label>
           <mat-select
             [(value)]="selectedShiftType"
             (selectionChanged)="emitShiftGroup()"
           >
-            <mat-option
-              *ngFor="let shiftType of localShiftTypes"
-              [value]="shiftType"
-            >
+            @for (shiftType of localShiftTypes; track shiftType) {
+            <mat-option [value]="shiftType">
               {{ shiftType }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <button
@@ -85,8 +91,10 @@
           add Shift Type
         </button>
       </div>
+      }
       <table class="shiftTypeTable">
-        <th *ngFor="let shiftType of shiftGroup.shiftTypes">
+        @for (shiftType of shiftGroup.shiftTypes; track shiftType) {
+        <th>
           <div class="table-element-container flex-row-center-container">
             <td class="shiftTypeName">
               {{ shiftType }}
@@ -96,6 +104,7 @@
             </button>
           </div>
         </th>
+        }
       </table>
     </div>
   </div>

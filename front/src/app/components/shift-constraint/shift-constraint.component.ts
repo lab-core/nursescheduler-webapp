@@ -1,25 +1,33 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { BASE_VALUE } from 'src/app/constants/constraints';
-import { ShiftConstraint } from 'src/app/models/ShiftConstraint';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { FormControl, Validators } from "@angular/forms";
+import { BASE_VALUE } from "src/app/constants/constraints";
+import { ShiftConstraint } from "src/app/models/ShiftConstraint";
 
 @Component({
-  selector: 'app-shift-constraint',
-  templateUrl: './shift-constraint.component.html',
-  styleUrls: ['./shift-constraint.component.css']
+  selector: "app-shift-constraint",
+  templateUrl: "./shift-constraint.component.html",
+  styleUrls: ["./shift-constraint.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class ShiftConstraintComponent implements OnInit{
-
+export class ShiftConstraintComponent implements OnInit {
   @Input() constraint!: ShiftConstraint;
   @Output() constraintChange: EventEmitter<ShiftConstraint>;
-  @Input() possibleShifts! : string[];
+  @Input() possibleShifts!: string[];
   @Output() errorState: EventEmitter<boolean>;
   weightErrorState: boolean;
   selectFormCtrl: FormControl;
   weightLabel: string;
   valueErrorState: boolean;
 
-  constructor(){
+  constructor() {
     this.constraintChange = new EventEmitter();
     this.errorState = new EventEmitter();
     this.weightErrorState = true;
@@ -29,17 +37,21 @@ export class ShiftConstraintComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    if(!this.possibleShifts.includes(this.constraint.shiftId)){
+    if (!this.possibleShifts.includes(this.constraint.shiftId)) {
       this.constraint.shiftId = "";
     }
     this.weightErrorState = this.constraint.weight === BASE_VALUE;
-    this.valueErrorState = this.constraint.value === '';
+    this.valueErrorState = this.constraint.value === "";
     this.selectFormCtrl.setValue(this.constraint.shiftId);
     this.emitConstraint();
   }
 
   emitErrorState() {
-    this.errorState.emit(this.selectFormCtrl.hasError('required') || this.weightErrorState || this.valueErrorState);
+    this.errorState.emit(
+      this.selectFormCtrl.hasError("required") ||
+        this.weightErrorState ||
+        this.valueErrorState
+    );
   }
 
   emitConstraint() {
@@ -47,7 +59,7 @@ export class ShiftConstraintComponent implements OnInit{
     this.emitErrorState();
   }
 
-  updateWeightErrorState(e:boolean) {
+  updateWeightErrorState(e: boolean) {
     this.weightErrorState = e;
     this.emitConstraint();
   }

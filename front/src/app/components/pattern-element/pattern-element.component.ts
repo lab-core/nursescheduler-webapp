@@ -1,30 +1,36 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { CustomSelector } from 'src/app/models/CustomSelector';
-import { PatternElement } from 'src/app/models/PatternElement';
-import { DateUtils } from 'src/app/utils/DateUtils';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { FormControl, Validators } from "@angular/forms";
+import { CustomSelector } from "src/app/models/CustomSelector";
+import { PatternElement } from "src/app/models/PatternElement";
+import { DateUtils } from "src/app/utils/DateUtils";
 
 @Component({
-  selector: 'app-pattern-element',
-  templateUrl: './pattern-element.component.html',
-  styleUrls: ['./pattern-element.component.css']
+  selector: "app-pattern-element",
+  templateUrl: "./pattern-element.component.html",
+  styleUrls: ["./pattern-element.component.css"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class PatternElementComponent implements OnInit{
-
-  possibleDays: string[]
+export class PatternElementComponent implements OnInit {
+  possibleDays: string[];
   customSelectorDays: CustomSelector[];
   customSelectorShifts: CustomSelector[];
 
+  @Input() possibleShifts!: string[];
+  @Input() element!: PatternElement;
 
-  @Input() possibleShifts!: string[]
-  @Input() element!: PatternElement
-
-  @Output() elementChange: EventEmitter<PatternElement>
-  @Output() errorState: EventEmitter<boolean>
+  @Output() elementChange: EventEmitter<PatternElement>;
+  @Output() errorState: EventEmitter<boolean>;
 
   daySelectorFormControl: FormControl;
   shiftSelectorFormControl: FormControl;
-
 
   constructor() {
     this.possibleDays = DateUtils.days;
@@ -43,10 +49,10 @@ export class PatternElementComponent implements OnInit{
 
   ngOnInit(): void {
     this.daySelectorFormControl.setValue(this.element.days);
-    this.shiftSelectorFormControl.setValue(this.element.shifts);  
+    this.shiftSelectorFormControl.setValue(this.element.shifts);
   }
 
-  emitElement(){
+  emitElement() {
     this.elementChange.emit(this.element);
     this.emitErrorState();
   }

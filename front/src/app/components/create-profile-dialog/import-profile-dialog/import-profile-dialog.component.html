@@ -1,273 +1,456 @@
-<div *ngIf="connectedUser; else elseBlock" class="import-container">
-    <div class="header">
-        <h1 routerLink="/main-menu" >Nurse scheduler</h1>
+@if (connectedUser) {
+<div class="import-container">
+  <div class="header">
+    <h1 routerLink="/main-menu">Nurse scheduler</h1>
+  </div>
+  <div class="import-file-section">
+    <input
+      type="file"
+      class="file-input"
+      (change)="onFileSelected($event)"
+      #fileUpload
+    />
+    <div class="file-upload">
+      {{ fileName || "No file uploaded" }}
+      <button
+        mat-raised-button
+        color="nurse-blue"
+        class="upload-btn"
+        (click)="fileUpload.click()"
+      >
+        Upload a profile or a problem
+        <mat-icon>attach_file</mat-icon>
+      </button>
     </div>
-    <div class="import-file-section">
-        <input type="file" class="file-input"
-            (change)="onFileSelected($event)" #fileUpload>
-
-        <div class="file-upload">
-            {{fileName || "No file uploaded"}}
-            <button mat-raised-button color="nurse-blue" class="upload-btn"
-            (click)="fileUpload.click()">
-            Upload a profile or a problem
-                <mat-icon>attach_file</mat-icon>
-            </button>
-        </div>
-        <div>
-            <button class="download-template-btn" mat-raised-button color="nurse-blue" (click)="downloadTemplate()">Download Profile Template</button>
-            <button *ngIf="!validProfile" class="cancel-button" mat-raised-button color="warn" (click)="cancel()">Cancel</button>
-        </div>
+    <div>
+      <button
+        class="download-template-btn"
+        mat-raised-button
+        color="nurse-blue"
+        (click)="downloadTemplate()"
+      >
+        Download Profile Template
+      </button>
+      @if (!validProfile) {
+      <button
+        class="cancel-button"
+        mat-raised-button
+        color="warn"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+      }
     </div>
-    <div class="content-section" *ngIf="validProfile">
-        <div class="name-section">
-            <label class="label">Profile name: </label>
-            <mat-form-field appearance="fill">
-                <mat-label>Profile name</mat-label>
-                <input matInput [(ngModel)]="profile.profile"
-                [formControl]="profileNameCtrl"/>
-            </mat-form-field>
-            <mat-error *ngIf="nameExist()">
-                Profile name is already used
-            </mat-error>
-            <mat-error *ngIf="containsWhiteSpace()">
-                Profile name should not contain empty spaces
-            </mat-error>
-        </div>
-        <mat-accordion multi>
-            <mat-expansion-panel class="shifts-section">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon *ngIf="shiftSectionHasError()" color="warn" class="error-icon">error</mat-icon>
-                        <h1>Shifts</h1>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-action-row>
-                    <button mat-fab class="add-button" color="primary" (click)="addShift()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </mat-action-row>
-                <mat-exansion-panel *ngFor="let shift of profile.shifts; let i=index" class="shift-element">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class=flex-row-center-container>
-                                <mat-icon *ngIf="shiftHasError(i)" color="warn" class="error-icon">error</mat-icon>
-                                <h2>{{shift.name}}</h2>
-                            </div>
-                            <button mat-icon-button (click)="removeShift(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <app-shift-creation [(shift)]="profile.shifts[i]" [imported]="imported" [shifts]="possibleShifts" (errorState)="updateShiftErrorState(i, $event)" ></app-shift-creation>
-                </mat-exansion-panel>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel class="shift-types-section">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon *ngIf="shiftTypeSectionHasError()" color="warn"  class="error-icon">error</mat-icon>
-                        <h1>Shift types</h1>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-action-row>
-                    <button mat-fab class="add-button" color="primary" (click)="addShiftType()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </mat-action-row>
-                <mat-expansion-panel *ngFor="let shiftType of profile.shiftTypes; let i=index" class="shift-type-element">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class=flex-row-center-container>
-                                <mat-icon *ngIf="shiftTypeHasError(i)" color="warn"  class="error-icon">error</mat-icon>
-                                <h2>{{shiftType.name}}</h2>
-                            </div>
-                            <button mat-icon-button (click)="removeShiftType(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <app-shift-type-creation [imported]="imported" [(shiftType)]="profile.shiftTypes[i]" [possibleShifts]="possibleShifts" [selectedShift]="possibleShifts[0]" (errorState)="updateShiftTypeErrorState(i,$event)" [shiftsType]="possibleShiftTypes"></app-shift-type-creation>
-                </mat-expansion-panel>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel class="shift-groups-section">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon *ngIf="shiftGroupSectionHasError()" color="warn" class="error-icon">error</mat-icon>
-                        <h1>Shift groups</h1>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-action-row>
-                    <button mat-fab class="add-button" color="primary" (click)="addShiftGroup()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </mat-action-row>
-                <mat-expansion-panel *ngFor="let shiftGroup of profile.shiftGroups; let i=index" class="shift-group-element">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class=flex-row-center-container>
-                                <mat-icon *ngIf="shiftGroupHasError(i)" color="warn" class="error-icon">error</mat-icon>
-                                <h2>{{shiftGroup.name}}</h2>
-                            </div>
-                            <button mat-icon-button (click)="removeShiftGroup(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <app-shift-group-creation [imported]="imported" [(shiftGroup)]="profile.shiftGroups[i]" [possibleShifts]="possibleShifts" [selectedShift]="possibleShifts[0]" [possibleShiftsType]="possibleShiftTypes" [selectedShiftType]="possibleShiftTypes[0]" (errorState)="updateShiftGroupErrorState(i, $event)" [shiftsGroup]="possibleShiftGroups"></app-shift-group-creation>
-                </mat-expansion-panel>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel class="contracts-section">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon *ngIf="contractSectionHasError()" color="warn" class="error-icon">error</mat-icon>
-                        <h1>Contracts</h1>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-action-row>
-                    <button mat-fab class="add-button" color="primary" (click)="addContract()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </mat-action-row>
-                <mat-expansion-panel *ngFor="let c of contracts; let i=index" class="contract-element">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class=flex-row-center-container>
-                                <mat-icon *ngIf="contractHasError(i)" color="warn" class="error-icon">error</mat-icon>
-                                <h2>{{c.name}}</h2>
-                            </div>
-                            <button mat-icon-button (click)="removeContract(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <app-contract-creation [imported]="imported" [(contract)]="contracts[i]" [possibleShifts]="contractShifts" [possibleSkills]="skills" [contracts]="contractNames" (errorState)="updateContractErrorState(i, $event)"></app-contract-creation>
-                </mat-expansion-panel>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel class="contractGroup-section">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon *ngIf="contractGroupSectionHasError()" color="warn" class="error-icon">error</mat-icon>
-                        <h1>Contracts group</h1>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-action-row>
-                    <button mat-fab class="add-button" color="primary" (click)="addContractGroup()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </mat-action-row>
-                <mat-expansion-panel *ngFor="let c of profile.contractGroups; let i=index" class="contractGroup-element">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class=flex-row-center-container>
-                                <mat-icon *ngIf="contractGroupHasError(i)" color="warn" class="error-icon">error</mat-icon>
-                                <h2>{{c.name}}</h2>
-                            </div>
-                            <button mat-icon-button (click)="removeContractGroup(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <app-contract-group-creation [imported]="imported" [(contractGroup)]="profile.contractGroups[i]" [contractGroups]="contractsGroup" [possibleContracts]="possibleContracts" [selectedContract]="possibleContracts[0]"  (errorState)="updateContractGroupErrorState(i,$event)"></app-contract-group-creation>
-                </mat-expansion-panel>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel class="nurses-section">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon *ngIf="nurseSectionHasError()" color="warn" class="error-icon">error</mat-icon>
-                        <h1>Nurses</h1>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-action-row>
-                    <button mat-fab class="add-button" color="primary" (click)="addNurse()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </mat-action-row>
-                <mat-expansion-panel *ngFor="let n of profile.nurses; let i=index" class="nurse-element">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class=flex-row-center-container>
-                                <mat-icon class="error-icon" *ngIf="nurseHasError(i)" color="warn">error</mat-icon>
-                                <h2>{{n.username}}</h2>
-                            </div>
-                            <button mat-icon-button (click)="removeNurse(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <app-nurse-creation [imported]="imported" [(nurse)]="profile.nurses[i]" [possibleContracts]="contractNames" [possibleContractsGroup]="contractsGroup" [selectedContract]="contractNames[0]" [selectedContractGroup]="contractsGroup[0]"  [nurses]="nurses" (errorState)="updateNurseErrorState(i, $event)"></app-nurse-creation>
-                </mat-expansion-panel>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel class="nurse-groups-section">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon *ngIf="nurseGroupSectionHasError()" color="warn" class="error-icon">error</mat-icon>
-                        <h1>Nurse groups</h1>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-action-row>
-                    <button mat-fab class="add-button" color="primary" (click)="addNurseGroup()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </mat-action-row>
-                <mat-expansion-panel *ngFor="let n of profile.nurseGroups; let i=index" class="nurse-group-element">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class=flex-row-center-container>
-                                <mat-icon *ngIf="nurseGroupHasError(i)" color="warn" class="error-icon">error</mat-icon>
-                                <h2>{{n.name}}</h2>
-                            </div>
-                            <button mat-icon-button (click)="removeNurseGroup(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <app-nurse-group-creation [imported]="imported" [(nurseGroup)]="profile.nurseGroups[i]" [possibleContracts]="contractNames" [possibleContractsGroup]="contractsGroup" [selectedContract]="contractNames[0]" [selectedContractGroup]="contractsGroup[0]" [possibleNurses]="nurses" [selectedNurse]="nurses[0]" [nurseGroups]="nurseGroups" (errorState)="updateNurseGroupErrorState(i, $event)"></app-nurse-group-creation>
-                </mat-expansion-panel>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel class="skills-section">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon *ngIf="skillSectionHasError()" color="warn" class="error-icon">error</mat-icon>
-                        <h1>Skills</h1>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-action-row>
-                    <button mat-fab class="add-button" color="primary" (click)="addSkill()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </mat-action-row>
-                <mat-expansion-panel *ngFor="let s of profile.skills; let i=index" class="skill-element">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class=flex-row-center-container>
-                                <mat-icon *ngIf="skillHasError(i)" color="warn">error</mat-icon>
-                                <h2>{{s.name}}</h2>
-                            </div>
-                            <button mat-icon-button (click)="removeSkill(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <app-skill-creation [imported]="imported" [(skill)]="profile.skills[i]" [skills]="skills" (errorState)="updateSkillErrorState(i, $event)"></app-skill-creation>
-                </mat-expansion-panel>
-            </mat-expansion-panel>
-        </mat-accordion>
-        <mat-error *ngIf="formHasError()">
-            Fix all the highlighted errors. You may have to correct the imported file and restart the importation.
-        </mat-error>
+  </div>
+  @if (validProfile) {
+  <div class="content-section">
+    <div class="name-section">
+      <label class="label">Profile name: </label>
+      <mat-form-field appearance="fill">
+        <mat-label>Profile name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="profile.profile"
+          [formControl]="profileNameCtrl"
+        />
+      </mat-form-field>
+      @if (nameExist()) {
+      <mat-error> Profile name is already used </mat-error>
+      } @if (containsWhiteSpace()) {
+      <mat-error> Profile name should not contain empty spaces </mat-error>
+      }
     </div>
-    <div class="action-buttons" *ngIf="validProfile">
-        <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
-        <button mat-raised-button color="primary" class="save-btn" [disabled]="formHasError()" (click)="saveProfile()">Save</button>
-    </div>
+    <mat-accordion multi>
+      <mat-expansion-panel class="shifts-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            @if (shiftSectionHasError()) {
+            <mat-icon color="warn" class="error-icon">error</mat-icon>
+            }
+            <h1>Shifts</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button
+            mat-fab
+            class="add-button"
+            color="primary"
+            (click)="addShift()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-action-row>
+        @for (shift of profile.shifts; track shift; let i = $index) {
+        <mat-exansion-panel class="shift-element">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              <div class="flex-row-center-container">
+                @if (shiftHasError(i)) {
+                <mat-icon color="warn" class="error-icon">error</mat-icon>
+                }
+                <h2>{{ shift.name }}</h2>
+              </div>
+              <button mat-icon-button (click)="removeShift(i)">
+                <mat-icon class="remove-icon">cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-shift-creation
+            [(shift)]="profile.shifts[i]"
+            [imported]="imported"
+            [shifts]="possibleShifts"
+            (errorState)="updateShiftErrorState(i, $event)"
+          ></app-shift-creation>
+        </mat-exansion-panel>
+        }
+      </mat-expansion-panel>
+      <mat-expansion-panel class="shift-types-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            @if (shiftTypeSectionHasError()) {
+            <mat-icon color="warn" class="error-icon">error</mat-icon>
+            }
+            <h1>Shift types</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button
+            mat-fab
+            class="add-button"
+            color="primary"
+            (click)="addShiftType()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-action-row>
+        @for (shiftType of profile.shiftTypes; track shiftType; let i = $index)
+        {
+        <mat-expansion-panel class="shift-type-element">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              <div class="flex-row-center-container">
+                @if (shiftTypeHasError(i)) {
+                <mat-icon color="warn" class="error-icon">error</mat-icon>
+                }
+                <h2>{{ shiftType.name }}</h2>
+              </div>
+              <button mat-icon-button (click)="removeShiftType(i)">
+                <mat-icon class="remove-icon">cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-shift-type-creation
+            [imported]="imported"
+            [(shiftType)]="profile.shiftTypes[i]"
+            [possibleShifts]="possibleShifts"
+            [selectedShift]="possibleShifts[0]"
+            (errorState)="updateShiftTypeErrorState(i, $event)"
+            [shiftsType]="possibleShiftTypes"
+          ></app-shift-type-creation>
+        </mat-expansion-panel>
+        }
+      </mat-expansion-panel>
+      <mat-expansion-panel class="shift-groups-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            @if (shiftGroupSectionHasError()) {
+            <mat-icon color="warn" class="error-icon">error</mat-icon>
+            }
+            <h1>Shift groups</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button
+            mat-fab
+            class="add-button"
+            color="primary"
+            (click)="addShiftGroup()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-action-row>
+        @for (shiftGroup of profile.shiftGroups; track shiftGroup; let i =
+        $index) {
+        <mat-expansion-panel class="shift-group-element">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              <div class="flex-row-center-container">
+                @if (shiftGroupHasError(i)) {
+                <mat-icon color="warn" class="error-icon">error</mat-icon>
+                }
+                <h2>{{ shiftGroup.name }}</h2>
+              </div>
+              <button mat-icon-button (click)="removeShiftGroup(i)">
+                <mat-icon class="remove-icon">cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-shift-group-creation
+            [imported]="imported"
+            [(shiftGroup)]="profile.shiftGroups[i]"
+            [possibleShifts]="possibleShifts"
+            [selectedShift]="possibleShifts[0]"
+            [possibleShiftsType]="possibleShiftTypes"
+            [selectedShiftType]="possibleShiftTypes[0]"
+            (errorState)="updateShiftGroupErrorState(i, $event)"
+            [shiftsGroup]="possibleShiftGroups"
+          ></app-shift-group-creation>
+        </mat-expansion-panel>
+        }
+      </mat-expansion-panel>
+      <mat-expansion-panel class="contracts-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            @if (contractSectionHasError()) {
+            <mat-icon color="warn" class="error-icon">error</mat-icon>
+            }
+            <h1>Contracts</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button
+            mat-fab
+            class="add-button"
+            color="primary"
+            (click)="addContract()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-action-row>
+        @for (c of contracts; track c; let i = $index) {
+        <mat-expansion-panel class="contract-element">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              <div class="flex-row-center-container">
+                @if (contractHasError(i)) {
+                <mat-icon color="warn" class="error-icon">error</mat-icon>
+                }
+                <h2>{{ c.name }}</h2>
+              </div>
+              <button mat-icon-button (click)="removeContract(i)">
+                <mat-icon class="remove-icon">cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-contract-creation
+            [imported]="imported"
+            [(contract)]="contracts[i]"
+            [possibleShifts]="contractShifts"
+            [possibleSkills]="skills"
+            [contracts]="contractNames"
+            (errorState)="updateContractErrorState(i, $event)"
+          ></app-contract-creation>
+        </mat-expansion-panel>
+        }
+      </mat-expansion-panel>
+      <mat-expansion-panel class="contractGroup-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            @if (contractGroupSectionHasError()) {
+            <mat-icon color="warn" class="error-icon">error</mat-icon>
+            }
+            <h1>Contracts group</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button
+            mat-fab
+            class="add-button"
+            color="primary"
+            (click)="addContractGroup()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-action-row>
+        @for (c of profile.contractGroups; track c; let i = $index) {
+        <mat-expansion-panel class="contractGroup-element">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              <div class="flex-row-center-container">
+                @if (contractGroupHasError(i)) {
+                <mat-icon color="warn" class="error-icon">error</mat-icon>
+                }
+                <h2>{{ c.name }}</h2>
+              </div>
+              <button mat-icon-button (click)="removeContractGroup(i)">
+                <mat-icon class="remove-icon">cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-contract-group-creation
+            [imported]="imported"
+            [(contractGroup)]="profile.contractGroups[i]"
+            [contractGroups]="contractsGroup"
+            [possibleContracts]="possibleContracts"
+            [selectedContract]="possibleContracts[0]"
+            (errorState)="updateContractGroupErrorState(i, $event)"
+          ></app-contract-group-creation>
+        </mat-expansion-panel>
+        }
+      </mat-expansion-panel>
+      <mat-expansion-panel class="nurses-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            @if (nurseSectionHasError()) {
+            <mat-icon color="warn" class="error-icon">error</mat-icon>
+            }
+            <h1>Nurses</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button
+            mat-fab
+            class="add-button"
+            color="primary"
+            (click)="addNurse()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-action-row>
+        @for (n of profile.nurses; track n; let i = $index) {
+        <mat-expansion-panel class="nurse-element">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              <div class="flex-row-center-container">
+                @if (nurseHasError(i)) {
+                <mat-icon class="error-icon" color="warn">error</mat-icon>
+                }
+                <h2>{{ n.username }}</h2>
+              </div>
+              <button mat-icon-button (click)="removeNurse(i)">
+                <mat-icon class="remove-icon">cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-nurse-creation
+            [imported]="imported"
+            [(nurse)]="profile.nurses[i]"
+            [possibleContracts]="contractNames"
+            [possibleContractsGroup]="contractsGroup"
+            [selectedContract]="contractNames[0]"
+            [selectedContractGroup]="contractsGroup[0]"
+            [nurses]="nurses"
+            (errorState)="updateNurseErrorState(i, $event)"
+          ></app-nurse-creation>
+        </mat-expansion-panel>
+        }
+      </mat-expansion-panel>
+      <mat-expansion-panel class="nurse-groups-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            @if (nurseGroupSectionHasError()) {
+            <mat-icon color="warn" class="error-icon">error</mat-icon>
+            }
+            <h1>Nurse groups</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button
+            mat-fab
+            class="add-button"
+            color="primary"
+            (click)="addNurseGroup()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-action-row>
+        @for (n of profile.nurseGroups; track n; let i = $index) {
+        <mat-expansion-panel class="nurse-group-element">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              <div class="flex-row-center-container">
+                @if (nurseGroupHasError(i)) {
+                <mat-icon color="warn" class="error-icon">error</mat-icon>
+                }
+                <h2>{{ n.name }}</h2>
+              </div>
+              <button mat-icon-button (click)="removeNurseGroup(i)">
+                <mat-icon class="remove-icon">cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-nurse-group-creation
+            [imported]="imported"
+            [(nurseGroup)]="profile.nurseGroups[i]"
+            [possibleContracts]="contractNames"
+            [possibleContractsGroup]="contractsGroup"
+            [selectedContract]="contractNames[0]"
+            [selectedContractGroup]="contractsGroup[0]"
+            [possibleNurses]="nurses"
+            [selectedNurse]="nurses[0]"
+            [nurseGroups]="nurseGroups"
+            (errorState)="updateNurseGroupErrorState(i, $event)"
+          ></app-nurse-group-creation>
+        </mat-expansion-panel>
+        }
+      </mat-expansion-panel>
+      <mat-expansion-panel class="skills-section">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            @if (skillSectionHasError()) {
+            <mat-icon color="warn" class="error-icon">error</mat-icon>
+            }
+            <h1>Skills</h1>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button
+            mat-fab
+            class="add-button"
+            color="primary"
+            (click)="addSkill()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-action-row>
+        @for (s of profile.skills; track s; let i = $index) {
+        <mat-expansion-panel class="skill-element">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              <div class="flex-row-center-container">
+                @if (skillHasError(i)) {
+                <mat-icon color="warn">error</mat-icon>
+                }
+                <h2>{{ s.name }}</h2>
+              </div>
+              <button mat-icon-button (click)="removeSkill(i)">
+                <mat-icon class="remove-icon">cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-skill-creation
+            [imported]="imported"
+            [(skill)]="profile.skills[i]"
+            [skills]="skills"
+            (errorState)="updateSkillErrorState(i, $event)"
+          ></app-skill-creation>
+        </mat-expansion-panel>
+        }
+      </mat-expansion-panel>
+    </mat-accordion>
+    @if (formHasError()) {
+    <mat-error>
+      Fix all the highlighted errors. You may have to correct the imported file
+      and restart the importation.
+    </mat-error>
+    }
+  </div>
+  } @if (validProfile) {
+  <div class="action-buttons">
+    <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      class="save-btn"
+      [disabled]="formHasError()"
+      (click)="saveProfile()"
+    >
+      Save
+    </button>
+  </div>
+  }
 </div>
-<ng-template #elseBlock>
-    <app-not-connected></app-not-connected>
-</ng-template>
+} @else {
+<app-not-connected></app-not-connected>
+}
