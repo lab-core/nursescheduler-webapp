@@ -82,8 +82,4 @@ export class UnwantedSkillsComponent implements OnInit{
     this.skillsFormCtrl.splice(index,1);
     this.emitConstraint();
   }
-
-  trackByFn(index: number): number {
-    return index;
-  }
 }

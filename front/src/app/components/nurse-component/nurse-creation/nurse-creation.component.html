@@ -6,11 +6,7 @@
     <div class="inputContainer">
       <mat-form-field class="nameForm" appearance="fill">
         <mat-label>Enter nurse Name</mat-label>
-        <input
-          matInput
-          [formControl]="nameNurseFormCtrl"
-          (keyup)="setName()"
-        />
+        <input matInput [formControl]="nameNurseFormCtrl" (keyup)="setName()" />
       </mat-form-field>
     </div>
   </div>
@@ -26,31 +22,33 @@
           (keyup)="setUsername()"
         />
       </mat-form-field>
-      <mat-error *ngIf="usernamePatternErrorState()">
-  				Username not valid: must only contains characters, numbers, '-', '_', and '.'
-  		</mat-error>
-      <mat-error *ngIf="usernameExistsErrorState()">
-          Username is already taken
+      @if (usernamePatternErrorState()) {
+      <mat-error>
+        Username not valid: must only contains characters, numbers, '-', '_',
+        and '.'
       </mat-error>
+      } @if (usernameExistsErrorState()) {
+      <mat-error> Username is already taken </mat-error>
+      }
     </div>
   </div>
   <div class="contractSection">
     <h2 class="contractSectionTitle">Contracts</h2>
     <hr />
     <div class="inputContainer">
-      <div *ngIf="localContracts.length > 0">
+      @if (localContracts.length > 0) {
+      <div>
         <mat-form-field appearance="fill">
           <mat-label>Select a contract</mat-label>
           <mat-select
             [(ngModel)]="selectedContract"
             (selectionChange)="emitNurse()"
           >
-            <mat-option
-              *ngFor="let contract of localContracts"
-              [value]="contract"
-            >
+            @for (contract of localContracts; track contract) {
+            <mat-option [value]="contract">
               {{ contract }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <button
@@ -62,8 +60,10 @@
           add contract
         </button>
       </div>
+      }
       <table class="contractTable">
-        <th *ngFor="let contract of nurse.contracts">
+        @for (contract of nurse.contracts; track contract) {
+        <th>
           <div class="table-element-container flex-row-center-container">
             <td class="contractName">
               {{ contract }}
@@ -73,6 +73,7 @@
             </button>
           </div>
         </th>
+        }
       </table>
     </div>
   </div>
@@ -80,19 +81,19 @@
     <h2 class="contractSectionTitle">Group Contracts</h2>
     <hr />
     <div class="inputContainer">
-      <div *ngIf="localContractGroups.length > 0">
+      @if (localContractGroups.length > 0) {
+      <div>
         <mat-form-field appearance="fill">
           <mat-label>Select a group contract</mat-label>
           <mat-select
             [(ngModel)]="selectedContractGroup"
             (selectionChange)="emitNurse()"
           >
-            <mat-option
-              *ngFor="let contractGroup of localContractGroups"
-              [value]="contractGroup"
-            >
+            @for (contractGroup of localContractGroups; track contractGroup) {
+            <mat-option [value]="contractGroup">
               {{ contractGroup }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <button
@@ -104,8 +105,10 @@
           add group contract
         </button>
       </div>
+      }
       <table class="contractGroupTable">
-        <th *ngFor="let contractGroup of nurse.contract_groups">
+        @for (contractGroup of nurse.contract_groups; track contractGroup) {
+        <th>
           <div class="table-element-container flex-row-center-container">
             <td class="contractGroupName">
               {{ contractGroup }}
@@ -118,10 +121,13 @@
             </button>
           </div>
         </th>
+        }
       </table>
     </div>
   </div>
-  <mat-error *ngIf="contractErrorState()">
-      You must provide at least a contract or a contract group.
+  @if (contractErrorState()) {
+  <mat-error>
+    You must provide at least a contract or a contract group.
   </mat-error>
+  }
 </div>

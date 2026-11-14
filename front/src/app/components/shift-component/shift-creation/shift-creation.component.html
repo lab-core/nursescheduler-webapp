@@ -13,16 +13,16 @@
           (keyup)="emitShift()"
         />
       </mat-form-field>
-      <mat-error *ngIf="nameExist() && shiftStartName === ''"
-        >Shift name is already used</mat-error
-      >
+      @if (nameExist() && shiftStartName === '') {
+      <mat-error>Shift name is already used</mat-error>
+      }
     </div>
   </div>
 
   <h2>Shift Duration</h2>
   <hr />
   <div class="duration-section">
-    <div  (mouseleave)="emitShift()">
+    <div (mouseleave)="emitShift()">
       <div class="label" mat-label>Start Time</div>
       <mat-form-field appearance="fill" class="startTime-section">
         <mat-label>Start Time</mat-label>
@@ -38,20 +38,13 @@
           [(ngModel)]="shift.startTime"
         />
 
-        <mat-icon
-          matPrefix
-          *ngIf="startTimeFormCtrl.value && !startTimeFormCtrl.disabled"
-          (click)="onClearStartTime()"
-        >
-          close
-        </mat-icon>
-
-        <mat-icon
-          matSuffix
-          *ngIf="!startTimeFormCtrl.disabled"
-          (click)="openFromIconStartTime(timepickerStart)"
+        @if (startTimeFormCtrl.value && !startTimeFormCtrl.disabled) {
+        <mat-icon matPrefix (click)="onClearStartTime()"> close </mat-icon>
+        } @if (!startTimeFormCtrl.disabled) {
+        <mat-icon matSuffix (click)="openFromIconStartTime(timepickerStart)"
           >schedule</mat-icon
         >
+        }
       </mat-form-field>
 
       <ngx-material-timepicker
@@ -61,7 +54,7 @@
         [disable]="true"
       ></ngx-material-timepicker>
     </div>
-    <div  (mouseleave)="emitShift()">
+    <div (mouseleave)="emitShift()">
       <div class="label" mat-label>End Time</div>
       <mat-form-field appearance="fill" class="endTime-section">
         <mat-label>End Time</mat-label>
@@ -75,20 +68,13 @@
           [(ngModel)]="shift.endTime"
         />
 
-        <mat-icon
-          matPrefix
-          *ngIf="endTimeFormCtrl.value && !endTimeFormCtrl.disabled"
-          (click)="onClearEndTime()"
-        >
-          close
-        </mat-icon>
-
-        <mat-icon
-          matSuffix
-          *ngIf="!endTimeFormCtrl.disabled"
-          (click)="openFromIconEndTime(timepickerEnd)"
+        @if (endTimeFormCtrl.value && !endTimeFormCtrl.disabled) {
+        <mat-icon matPrefix (click)="onClearEndTime()"> close </mat-icon>
+        } @if (!endTimeFormCtrl.disabled) {
+        <mat-icon matSuffix (click)="openFromIconEndTime(timepickerEnd)"
           >schedule</mat-icon
         >
+        }
       </mat-form-field>
 
       <ngx-material-timepicker

@@ -13,25 +13,28 @@
           (keyup)="emitShiftType()"
         />
       </mat-form-field>
-      <mat-error *ngIf="nameExist() && shiftTypeStartName === ''"
-        >Shift type name is already used</mat-error
-      >
+      @if (nameExist() && shiftTypeStartName === '') {
+      <mat-error>Shift type name is already used</mat-error>
+      }
     </div>
   </div>
   <div class="shifts-Section">
     <h2 class="shiftSectionTitle">Shifts</h2>
     <hr />
     <div class="formContainer">
-      <div *ngIf="localShifts.length > 0">
+      @if (localShifts.length > 0) {
+      <div>
         <mat-form-field appearance="fill">
           <mat-label>Select a shift</mat-label>
           <mat-select
             [(value)]="selectedShift"
             (selectionChange)="emitShiftType()"
           >
-            <mat-option *ngFor="let shift of localShifts" [value]="shift">
+            @for (shift of localShifts; track shift) {
+            <mat-option [value]="shift">
               {{ shift }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <button
@@ -43,9 +46,11 @@
           add Shift
         </button>
       </div>
+      }
     </div>
     <table class="shiftTable">
-      <th *ngFor="let shift of shiftType.shifts">
+      @for (shift of shiftType.shifts; track shift) {
+      <th>
         <div class="table-element-container flex-row-center-container">
           <td class="shiftName">
             {{ shift }}
@@ -55,6 +60,7 @@
           </button>
         </div>
       </th>
+      }
     </table>
   </div>
 </div>

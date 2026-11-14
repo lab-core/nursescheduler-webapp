@@ -1,21 +1,30 @@
-<div *ngIf="connectedUser; else elseBlock">
+@if (connectedUser) {
+<div>
   <app-header></app-header>
-  <div *ngIf="this.schedules.length > 0; else noSchedules">
+  @if (this.schedules.length > 0) {
+  <div>
     <div class="title-container">
       <div class="title">
         <h2>Schedules</h2>
-        <input type="file" class="file-input"
-            (change)="onFileSelected($event)" #fileUpload>
-
+        <input
+          type="file"
+          class="file-input"
+          (change)="onFileSelected($event)"
+          #fileUpload
+        />
         <div class="fileUpload">
-            <button mat-raised-button color="nurse-blue" class="upload-btn"
-            (click)="fileUpload.click()">
+          <button
+            mat-raised-button
+            color="nurse-blue"
+            class="upload-btn"
+            (click)="fileUpload.click()"
+          >
             Upload a solution
-                <mat-icon>attach_file</mat-icon>
-            </button>
+            <mat-icon>attach_file</mat-icon>
+          </button>
         </div>
       </div>
-      <hr>
+      <hr />
     </div>
     <div class="generateScheduleButtonContainer">
       <mat-form-field class="filter">
@@ -60,7 +69,6 @@
             {{ schedule.startDate }}
           </td>
         </ng-container>
-
         <ng-container matColumnDef="endDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
           <td
@@ -71,7 +79,6 @@
             {{ schedule.endDate }}
           </td>
         </ng-container>
-
         <ng-container matColumnDef="versionNumber">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Version number
@@ -84,7 +91,6 @@
             {{ schedule.version }}
           </td>
         </ng-container>
-
         <ng-container matColumnDef="state">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
           <td
@@ -95,7 +101,6 @@
             {{ schedule.state }}
           </td>
         </ng-container>
-
         <ng-container matColumnDef="actions" justify="end">
           <th mat-header-cell *matHeaderCellDef aria-label="row actions">
             Actions &nbsp;
@@ -124,14 +129,12 @@
             </mat-menu>
           </td>
         </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
         <!-- Row shown when there is no matching data.
-                <tr class="mat-row" *matNoDataRow>
+              <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-                </tr> -->
+              </tr> -->
       </table>
       <mat-paginator
         #paginator
@@ -141,19 +144,19 @@
       ></mat-paginator>
     </div>
   </div>
-  <ng-template #noSchedules>
-    <div class="noSchedules">
-      <p>There is no schedule please generate one</p>
-      <button
-        mat-raised-button
-        class="buttonCreateEmpty"
-        (click)="generateNewSchedule()"
-      >
-        Generate new schedule
-      </button>
-    </div>
-  </ng-template>
+  } @else {
+  <div class="noSchedules">
+    <p>There is no schedule please generate one</p>
+    <button
+      mat-raised-button
+      class="buttonCreateEmpty"
+      (click)="generateNewSchedule()"
+    >
+      Generate new schedule
+    </button>
+  </div>
+  }
 </div>
-<ng-template #elseBlock>
-  <app-not-connected></app-not-connected>
-</ng-template>
+} @else {
+<app-not-connected></app-not-connected>
+}

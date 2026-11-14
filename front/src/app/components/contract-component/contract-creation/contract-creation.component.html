@@ -1,65 +1,139 @@
 <div class="contract-container-page" (mouseleave)="emitContract()">
-    <div class="contract-container" #contractContainer>
+  <div class="contract-container" #contractContainer>
     <div class="name-section">
-        <label>Contract name: </label>
-        <mat-form-field appearance="fill" class="name-input">
-            <mat-label>Enter a name</mat-label>
-            <input matInput [(ngModel)]="contract.name"
-            [formControl]="nameFormCtrl"/>
-        </mat-form-field>
-        <mat-error *ngIf="nameExist() && contractStartName ===''">
-            Contract name is already used
-        </mat-error>
+      <label>Contract name: </label>
+      <mat-form-field appearance="fill" class="name-input">
+        <mat-label>Enter a name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="contract.name"
+          [formControl]="nameFormCtrl"
+        />
+      </mat-form-field>
+      @if (nameExist() && contractStartName ==='') {
+      <mat-error> Contract name is already used </mat-error>
+      }
     </div>
     <div class="constraints-section">
-        <h2 class="constraint-list">Chosen Constraints</h2>
-        <hr />
-        <div class="constraints-container" (mouseleave)="emitContract()">
-            <p *ngIf="contract.constraints.length===0">Please add a constraint to your contract from the options below.</p>
-            <div *ngFor="let constraint of contract.constraints; let i= index" class="constraint-container">
-                <mat-expansion-panel [expanded]="i === contract.constraints.length -1">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="panel-title">
-                            <div class="flex-row-center-container">
-                                <mat-icon *ngIf="constraintHasErrorState(i)" color="warn" class="error-icon">error</mat-icon>
-                                <h3>{{constraint.displayName}}</h3>
-                                <mat-icon class="tool-tip-icon" matTooltip={{constraint.description}}
-                                matTooltipPosition="right">help</mat-icon>
-                            </div>
-                            <button mat-icon-button (click)="removeConstraint(i)">
-                                <mat-icon class="remove-icon">cancel</mat-icon>
-                            </button>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <ng-container [ngSwitch]="constraint.name">
-                        <app-unwanted-patterns *ngSwitchCase="UnwantedPatternsId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [possibleShifts]="possibleShifts"></app-unwanted-patterns>
-                        <app-alternative-shift *ngSwitchCase="alternativeShiftId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [possibleShifts]="possibleShifts"></app-alternative-shift>
-                        <app-shift-constraint *ngSwitchCase="freeDaysAfterShiftId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [possibleShifts]="possibleShifts"></app-shift-constraint>
-                        <app-min-max-consecutive-shift *ngSwitchCase="minMaxConsecutiveShiftTypeId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [possibleShifts]="possibleShifts"></app-min-max-consecutive-shift>
-                        <app-boolean-constraint *ngSwitchCase="identicalWeekendId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)"></app-boolean-constraint>
-                        <app-boolean-constraint *ngSwitchCase="completeWeekendId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)"></app-boolean-constraint>
-                        <app-min-max-consecutive-shift *ngSwitchCase="totalNumberWeekendsId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [possibleShifts]="possibleShifts"></app-min-max-consecutive-shift>
-                        <app-min-max-consecutive-shift *ngSwitchCase="minMaxConsecutiveWorkingWeekendsId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [possibleShifts]="possibleShifts"></app-min-max-consecutive-shift>
-                        <app-min-max-consecutive-shift *ngSwitchCase="minMaxNbAssignmentsId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [possibleShifts]="possibleShifts"></app-min-max-consecutive-shift>
-                        <app-min-max-consecutive-shift *ngSwitchCase="minMaxWorkingHoursId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [possibleShifts]="possibleShifts"></app-min-max-consecutive-shift>
-                        <app-unwanted-skills *ngSwitchCase="UnwantedSkillsId" [(constraint)]="contract.constraints[i]" (errorState)="updateConstraintErrorState(i,$event)" [skills]="possibleSkills"></app-unwanted-skills>
-                        <div *ngSwitchDefault>Empty</div>
-                    </ng-container>
-                </mat-expansion-panel>
-            </div>
-
+      <h2 class="constraint-list">Chosen Constraints</h2>
+      <hr />
+      <div class="constraints-container" (mouseleave)="emitContract()">
+        @if (contract.constraints.length===0) {
+        <p>Please add a constraint to your contract from the options below.</p>
+        } @for (constraint of contract.constraints; track constraint; let i =
+        $index) {
+        <div class="constraint-container">
+          <mat-expansion-panel
+            [expanded]="i === contract.constraints.length - 1"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="panel-title">
+                <div class="flex-row-center-container">
+                  @if (constraintHasErrorState(i)) {
+                  <mat-icon color="warn" class="error-icon">error</mat-icon>
+                  }
+                  <h3>{{ constraint.displayName }}</h3>
+                  <mat-icon
+                    class="tool-tip-icon"
+                    matTooltip="{{ constraint.description }}"
+                    matTooltipPosition="right"
+                    >help</mat-icon
+                  >
+                </div>
+                <button mat-icon-button (click)="removeConstraint(i)">
+                  <mat-icon class="remove-icon">cancel</mat-icon>
+                </button>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @switch (constraint.name) { @case (UnwantedPatternsId) {
+            <app-unwanted-patterns
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [possibleShifts]="possibleShifts"
+            ></app-unwanted-patterns>
+            } @case (alternativeShiftId) {
+            <app-alternative-shift
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [possibleShifts]="possibleShifts"
+            ></app-alternative-shift>
+            } @case (freeDaysAfterShiftId) {
+            <app-shift-constraint
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [possibleShifts]="possibleShifts"
+            ></app-shift-constraint>
+            } @case (minMaxConsecutiveShiftTypeId) {
+            <app-min-max-consecutive-shift
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [possibleShifts]="possibleShifts"
+            ></app-min-max-consecutive-shift>
+            } @case (identicalWeekendId) {
+            <app-boolean-constraint
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+            ></app-boolean-constraint>
+            } @case (completeWeekendId) {
+            <app-boolean-constraint
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+            ></app-boolean-constraint>
+            } @case (totalNumberWeekendsId) {
+            <app-min-max-consecutive-shift
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [possibleShifts]="possibleShifts"
+            ></app-min-max-consecutive-shift>
+            } @case (minMaxConsecutiveWorkingWeekendsId) {
+            <app-min-max-consecutive-shift
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [possibleShifts]="possibleShifts"
+            ></app-min-max-consecutive-shift>
+            } @case (minMaxNbAssignmentsId) {
+            <app-min-max-consecutive-shift
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [possibleShifts]="possibleShifts"
+            ></app-min-max-consecutive-shift>
+            } @case (minMaxWorkingHoursId) {
+            <app-min-max-consecutive-shift
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [possibleShifts]="possibleShifts"
+            ></app-min-max-consecutive-shift>
+            } @case (UnwantedSkillsId) {
+            <app-unwanted-skills
+              [(constraint)]="contract.constraints[i]"
+              (errorState)="updateConstraintErrorState(i, $event)"
+              [skills]="possibleSkills"
+            ></app-unwanted-skills>
+            } @default {
+            <div>Empty</div>
+            } }
+          </mat-expansion-panel>
         </div>
-        
+        }
+      </div>
     </div>
-</div>
-<div class="constraints-menu">
-    <h2>Choose a constraint to be added </h2>
-    <div class="constraints flex-row-center-container">        
-        <div *ngFor="let constraint of possibleConstraints; let i= index" class="button-container">
-            <button class="constraint-button" mat-raised-button color="nurse-blue" (click)="addConstraint(constraint)">
-                {{ constraint }}
-            </button>
-        </div>
+  </div>
+  <div class="constraints-menu">
+    <h2>Choose a constraint to be added</h2>
+    <div class="constraints flex-row-center-container">
+      @for (constraint of possibleConstraints; track constraint; let i = $index)
+      {
+      <div class="button-container">
+        <button
+          class="constraint-button"
+          mat-raised-button
+          color="nurse-blue"
+          (click)="addConstraint(constraint)"
+        >
+          {{ constraint }}
+        </button>
+      </div>
+      }
     </div>
-</div>
+  </div>
 </div>

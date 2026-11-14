@@ -1,21 +1,25 @@
-<div class="main-menu-container" *ngIf="connectedUser; else elseBlock">
+@if (connectedUser) {
+<div class="main-menu-container">
   <app-header></app-header>
   <div class="main-menu-page-buttons-container">
-    <mat-card class="button-container" *ngFor="let button of buttons; let i = index">
-        <button
-          *ngIf="show(button)"
-          align="getAlignemntDirection(button,i)"
-          (click)="redirect(button)"
-        >
-          <img [src]="button.icon" align="left" />
-          <span>
-            <h1>{{ button.title }}</h1>
-            {{ button.description }}
-          </span>
-        </button>
-      </mat-card>
+    @for (button of buttons; track button; let i = $index) {
+    <mat-card class="button-container">
+      @if (show(button)) {
+      <button
+        align="getAlignemntDirection(button,i)"
+        (click)="redirect(button)"
+      >
+        <img [src]="button.icon" align="left" />
+        <span>
+          <h1>{{ button.title }}</h1>
+          {{ button.description }}
+        </span>
+      </button>
+      }
+    </mat-card>
+    }
   </div>
 </div>
-<ng-template #elseBlock>
-  <app-not-connected></app-not-connected>
-</ng-template>
+} @else {
+<app-not-connected></app-not-connected>
+}

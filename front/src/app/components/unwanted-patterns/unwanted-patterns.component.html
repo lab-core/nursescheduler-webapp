@@ -1,24 +1,47 @@
 <div class="unwanted-patterns-container">
-    <table cellspacing="5">
-        <tr *ngFor="let element of constraint.patternElements; let i= index">
-            <td class="pattern-cell">
-                <mat-card class="pattern">
-                        <mat-card-content>
-                            <app-pattern-element [(element)]="constraint.patternElements[i]" [possibleShifts]="possibleShifts" (errorState)="changePatternErrorState(i, $event)"></app-pattern-element>
-                        </mat-card-content>    
-                    <button *ngIf="constraint.patternElements.length > 1" mat-icon-button (click)="removePattern(element)" class="delete-pattern-button">
-                        <mat-icon class="delete-pattern-icon">cancel</mat-icon>
-                    </button>
-                </mat-card>
-            </td>
-        </tr>
-    </table>
-    <div class="additional-items">
-        <div class="flex-row-center-container">
-            <button mat-raised-button (click)="addPattern()" color="nurse-blue" matTooltip="Add another pattern" class="add-button">
-                Add new pattern
-            </button>
-        </div>
-        <app-weight [(weight)]="constraint.weight" (errorState)="updateWeightErrorState($event)" [label]="weightLabel"></app-weight>
+  <table cellspacing="5">
+    @for (element of constraint.patternElements; track element; let i = $index)
+    {
+    <tr>
+      <td class="pattern-cell">
+        <mat-card class="pattern">
+          <mat-card-content>
+            <app-pattern-element
+              [(element)]="constraint.patternElements[i]"
+              [possibleShifts]="possibleShifts"
+              (errorState)="changePatternErrorState(i, $event)"
+            ></app-pattern-element>
+          </mat-card-content>
+          @if (constraint.patternElements.length > 1) {
+          <button
+            mat-icon-button
+            (click)="removePattern(element)"
+            class="delete-pattern-button"
+          >
+            <mat-icon class="delete-pattern-icon">cancel</mat-icon>
+          </button>
+          }
+        </mat-card>
+      </td>
+    </tr>
+    }
+  </table>
+  <div class="additional-items">
+    <div class="flex-row-center-container">
+      <button
+        mat-raised-button
+        (click)="addPattern()"
+        color="nurse-blue"
+        matTooltip="Add another pattern"
+        class="add-button"
+      >
+        Add new pattern
+      </button>
     </div>
+    <app-weight
+      [(weight)]="constraint.weight"
+      (errorState)="updateWeightErrorState($event)"
+      [label]="weightLabel"
+    ></app-weight>
+  </div>
 </div>

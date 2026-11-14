@@ -1,34 +1,52 @@
 <div class="schedule-container">
-    <div class="nurse-name-table">
-      <table cellspacing="22px" class="nurse-table">
+  <div class="nurse-name-table">
+    <table cellspacing="22px" class="nurse-table">
+      <tr>
+        <th class="nurse-name-header">Nurse</th>
+      </tr>
+      @for (nurse of nurses; track nurse) {
+      <tr>
+        <td class="nurse-name-cell">{{ nurse.name }} - {{ nurse.username }}</td>
+      </tr>
+      }
+      <tr>
+        <td class="table-footer"></td>
+      </tr>
+    </table>
+  </div>
+  <div class="timetable-table">
+    @for (date of timetable; track date) {
+    <div class="date-table">
+      <caption class="date-header">
+        {{
+          date.day.substring(0, 3)
+        }}
+        {{
+          getDisplayedDate(date.date)
+        }}
+      </caption>
+      <table>
+        @for (nurse of nurses; track nurse) {
         <tr>
-          <th class="nurse-name-header">Nurse</th>
+          <th>
+            <mat-form-field appearance="fill">
+              <mat-label>Select a shift</mat-label>
+              <mat-select [value]="getHistory(date, nurse)">
+                @for (shift of possibleShifts; track shift) {
+                <mat-option
+                  (click)="onShiftChange(date, nurse, shift)"
+                  [value]="shift"
+                >
+                  {{ shift }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </th>
         </tr>
-        <tr *ngFor="let nurse of nurses">
-          <td class="nurse-name-cell">{{nurse.name}} - {{nurse.username}}</td>
-        </tr>
-        <tr>
-          <td class="table-footer"></td>
-        </tr>
+        }
       </table>
     </div>
-    <div class="timetable-table">
-      <div class="date-table" *ngFor="let date of timetable">
-        <caption class="date-header"> {{date.day.substring(0,3)}} {{getDisplayedDate(date.date)}}</caption>
-        <table>
-          <tr *ngFor="let nurse of nurses">
-            <th>
-                <mat-form-field appearance="fill">
-                    <mat-label>Select a shift</mat-label>
-                    <mat-select [value]="getHistory(date, nurse)">
-                      <mat-option *ngFor="let shift of possibleShifts" (click)="onShiftChange(date,nurse,shift)" [value]="shift">
-                         {{shift}}
-                      </mat-option>
-                  </mat-select>
-                </mat-form-field>
-            </th>
-          </tr>
-        </table>
-      </div>
-    </div>
+    }
   </div>
+</div>
