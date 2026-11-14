@@ -3,9 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { SkillInterface } from 'src/app/models/skill';
 
 @Component({
-  selector: 'app-skill-creation',
-  templateUrl: './skill-creation.component.html',
-  styleUrls: ['./skill-creation.component.css']
+    selector: 'app-skill-creation',
+    templateUrl: './skill-creation.component.html',
+    styleUrls: ['./skill-creation.component.css'],
+    standalone: false
 })
 export class SkillCreationComponent implements OnInit {
   @Input() skill!: SkillInterface;

@@ -13,9 +13,10 @@ import { MatSort } from '@angular/material/sort';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-contracts-view',
-  templateUrl: './contracts-view.component.html',
-  styleUrls: ['./contracts-view.component.css']
+    selector: 'app-contracts-view',
+    templateUrl: './contracts-view.component.html',
+    styleUrls: ['./contracts-view.component.css'],
+    standalone: false
 })
 export class ContractsViewComponent implements OnInit, AfterViewInit{
 

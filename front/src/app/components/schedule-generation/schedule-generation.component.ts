@@ -19,9 +19,10 @@ import { ContinuousVisualisationInterface, Solution } from "src/app/models/Sched
 
 
 @Component({
-  selector: "app-schedule-generation",
-  templateUrl: "./schedule-generation.component.html",
-  styleUrls: ["./schedule-generation.component.css"],
+    selector: "app-schedule-generation",
+    templateUrl: "./schedule-generation.component.html",
+    styleUrls: ["./schedule-generation.component.css"],
+    standalone: false
 })
 export class ScheduleGenerationComponent implements OnInit, OnDestroy {
   startDate: Date;

@@ -4,9 +4,10 @@ import { BASE_VALUE } from 'src/app/constants/constraints';
 import { AlternativeShift } from 'src/app/models/AlternativeShift';
 
 @Component({
-  selector: 'app-alternative-shift',
-  templateUrl: './alternative-shift.component.html',
-  styleUrls: ['./alternative-shift.component.css']
+    selector: 'app-alternative-shift',
+    templateUrl: './alternative-shift.component.html',
+    styleUrls: ['./alternative-shift.component.css'],
+    standalone: false
 })
 export class AlternativeShiftComponent implements OnInit{
 

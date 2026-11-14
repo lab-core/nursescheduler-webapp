@@ -17,9 +17,10 @@ import { ContinuousVisualisationInterface } from "src/app/models/Schedule";
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-schedule-view',
-  templateUrl: './schedule-view.component.html',
-  styleUrls: ['./schedule-view.component.css']
+    selector: 'app-schedule-view',
+    templateUrl: './schedule-view.component.html',
+    styleUrls: ['./schedule-view.component.css'],
+    standalone: false
 })
 export class SchedulesGalleryComponent implements OnInit, OnDestroy, AfterViewInit{
   connectedUser: boolean;

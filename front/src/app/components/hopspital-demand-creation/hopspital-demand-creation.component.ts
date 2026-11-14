@@ -8,9 +8,10 @@ import { DateUtils } from 'src/app/utils/DateUtils';
 
 
 @Component({
-  selector: 'app-hopspital-demand-creation',
-  templateUrl: './hopspital-demand-creation.component.html',
-  styleUrls: ['./hopspital-demand-creation.component.css']
+    selector: 'app-hopspital-demand-creation',
+    templateUrl: './hopspital-demand-creation.component.html',
+    styleUrls: ['./hopspital-demand-creation.component.css'],
+    standalone: false
 })
 export class HopspitalDemandCreationComponent  implements OnInit, OnChanges, OnDestroy{
   regex = WEIGHT_ALLOWED_INTEGERS

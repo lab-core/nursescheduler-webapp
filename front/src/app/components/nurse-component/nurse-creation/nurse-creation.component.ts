@@ -25,9 +25,10 @@ export function usernameExistsValidator(nurses: string[], minOccurences: number)
 
 
 @Component({
-  selector: 'app-nurse-creation',
-  templateUrl: './nurse-creation.component.html',
-  styleUrls: ['./nurse-creation.component.css']
+    selector: 'app-nurse-creation',
+    templateUrl: './nurse-creation.component.html',
+    styleUrls: ['./nurse-creation.component.css'],
+    standalone: false
 })
 export class NurseCreationComponent implements OnInit, OnChanges {
   @Input() nurse!: NurseInterface;

@@ -4,9 +4,10 @@ import { BASE_VALUE } from 'src/app/constants/constraints';
 import { ShiftConstraint } from 'src/app/models/ShiftConstraint';
 
 @Component({
-  selector: 'app-shift-constraint',
-  templateUrl: './shift-constraint.component.html',
-  styleUrls: ['./shift-constraint.component.css']
+    selector: 'app-shift-constraint',
+    templateUrl: './shift-constraint.component.html',
+    styleUrls: ['./shift-constraint.component.css'],
+    standalone: false
 })
 export class ShiftConstraintComponent implements OnInit{
 

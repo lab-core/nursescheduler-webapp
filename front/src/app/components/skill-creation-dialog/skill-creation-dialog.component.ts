@@ -7,9 +7,10 @@ import { Exception } from 'src/app/utils/Exception';
 import { ErrorMessageDialogComponent } from '../error-message-dialog/error-message-dialog.component';
 
 @Component({
-  selector: 'app-skill-creation-dialog',
-  templateUrl: './skill-creation-dialog.component.html',
-  styleUrls: ['./skill-creation-dialog.component.css']
+    selector: 'app-skill-creation-dialog',
+    templateUrl: './skill-creation-dialog.component.html',
+    styleUrls: ['./skill-creation-dialog.component.css'],
+    standalone: false
 })
 export class SkillCreationDialogComponent {
   @Output() errorState: EventEmitter<boolean>;

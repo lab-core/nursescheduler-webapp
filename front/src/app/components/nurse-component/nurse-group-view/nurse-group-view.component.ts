@@ -14,9 +14,10 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-nurse-group0view',
-  templateUrl: './nurse-group-view.component.html',
-  styleUrls: ['./nurse-group-view.component.css']
+    selector: 'app-nurse-group0view',
+    templateUrl: './nurse-group-view.component.html',
+    styleUrls: ['./nurse-group-view.component.css'],
+    standalone: false
 })
 export class NurseGroupViewComponent implements OnInit, AfterViewInit {
   

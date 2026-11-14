@@ -3,9 +3,10 @@ import { BASE_VALUE } from "src/app/constants/constraints";
 import { IntegerConstraint } from "src/app/models/IntegerConstraint";
 
 @Component({
-  selector: "app-integer-constraint",
-  templateUrl: "./integer-constraint.component.html",
-  styleUrls: ["./integer-constraint.component.css"],
+    selector: "app-integer-constraint",
+    templateUrl: "./integer-constraint.component.html",
+    styleUrls: ["./integer-constraint.component.css"],
+    standalone: false
 })
 export class IntegerConstraintComponent implements OnInit{
   @Input() constraint!: IntegerConstraint;

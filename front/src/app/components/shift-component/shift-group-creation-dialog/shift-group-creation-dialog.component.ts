@@ -10,9 +10,10 @@ import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-me
 
 
 @Component({
-  selector: 'app-shift-group-creation-dialog',
-  templateUrl: './shift-group-creation-dialog.component.html',
-  styleUrls: ['./shift-group-creation-dialog.component.css']
+    selector: 'app-shift-group-creation-dialog',
+    templateUrl: './shift-group-creation-dialog.component.html',
+    styleUrls: ['./shift-group-creation-dialog.component.css'],
+    standalone: false
 })
 export class ShiftGroupCreationDialogComponent implements OnInit {
   @Output() errorState: EventEmitter<boolean> | undefined;

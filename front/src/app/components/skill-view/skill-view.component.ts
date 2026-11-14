@@ -14,9 +14,10 @@ import { SkillCreationDialogComponent } from '../skill-creation-dialog/skill-cre
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-skill-view',
-  templateUrl: './skill-view.component.html',
-  styleUrls: ['./skill-view.component.css']
+    selector: 'app-skill-view',
+    templateUrl: './skill-view.component.html',
+    styleUrls: ['./skill-view.component.css'],
+    standalone: false
 })
 export class SkillViewComponent implements OnInit, AfterViewInit{
   skills: string[];

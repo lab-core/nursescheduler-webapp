@@ -3,9 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { ShiftTypeInterface } from 'src/app/models/Shift';
 
 @Component({
-  selector: 'app-shift-type-creation',
-  templateUrl: './shift-type-creation.component.html',
-  styleUrls: ['./shift-type-creation.component.css']
+    selector: 'app-shift-type-creation',
+    templateUrl: './shift-type-creation.component.html',
+    styleUrls: ['./shift-type-creation.component.css'],
+    standalone: false
 })
 export class ShiftTypeCreationComponent implements OnInit, OnChanges {
   @Input() shiftType!: ShiftTypeInterface;

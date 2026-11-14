@@ -14,9 +14,10 @@ import { ShiftGroupCreationDialogComponent } from '../shift-group-creation-dialo
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-shifts-group-view',
-  templateUrl: './shifts-group-view.component.html',
-  styleUrls: ['./shifts-group-view.component.css']
+    selector: 'app-shifts-group-view',
+    templateUrl: './shifts-group-view.component.html',
+    styleUrls: ['./shifts-group-view.component.css'],
+    standalone: false
 })
 export class ShiftGroupViewComponent implements OnInit, AfterViewInit{
   shiftsGroup: string[];

@@ -4,9 +4,10 @@ import { BOOLEAN_CONSTRAINT_DISCLAIMER } from "src/app/constants/constraintsDesc
 import { BooleanConstraint } from "src/app/models/BooleanConstraint";
 
 @Component({
-  selector: "app-boolean-constraint",
-  templateUrl: "./boolean-constraint.component.html",
-  styleUrls: ["./boolean-constraint.component.css"],
+    selector: "app-boolean-constraint",
+    templateUrl: "./boolean-constraint.component.html",
+    styleUrls: ["./boolean-constraint.component.css"],
+    standalone: false
 })
 export class BooleanConstraintComponent implements OnInit{
   @Input() constraint!: BooleanConstraint;

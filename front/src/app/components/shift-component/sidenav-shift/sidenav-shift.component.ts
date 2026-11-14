@@ -6,9 +6,10 @@ import { SHIFT, SHIFT_GROUP, SHIFT_TYPE, SKILL } from 'src/app/constants/app-rou
   
 
 @Component({
-  selector: 'app-sidenav-shift',
-  templateUrl: './sidenav-shift.component.html',
-  styleUrls: ['./sidenav-shift.component.css']
+    selector: 'app-sidenav-shift',
+    templateUrl: './sidenav-shift.component.html',
+    styleUrls: ['./sidenav-shift.component.css'],
+    standalone: false
 })
 export class SidenavShiftComponent {
 

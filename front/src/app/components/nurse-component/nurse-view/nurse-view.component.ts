@@ -15,9 +15,10 @@ import { NurseCreationDialogComponent } from "../nurse-creation-dialog/nurse-cre
 import { ConfirmationDialogComponent } from "../../confirmation-dialog/confirmation-dialog.component";
 
 @Component({
-  selector: "app-nurse-view",
-  templateUrl: "./nurse-view.component.html",
-  styleUrls: ["./nurse-view.component.css"],
+    selector: "app-nurse-view",
+    templateUrl: "./nurse-view.component.html",
+    styleUrls: ["./nurse-view.component.css"],
+    standalone: false
 })
 export class NurseViewComponent implements OnInit, AfterViewInit{
   

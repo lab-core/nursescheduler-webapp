@@ -14,9 +14,10 @@ import { ContractGroupCreationDialogComponent } from '../contract-group-creation
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-contracts-group-view',
-  templateUrl: './contracts-group-view.component.html',
-  styleUrls: ['./contracts-group-view.component.css']
+    selector: 'app-contracts-group-view',
+    templateUrl: './contracts-group-view.component.html',
+    styleUrls: ['./contracts-group-view.component.css'],
+    standalone: false
 })
 export class ContractsGroupViewComponent implements OnInit, AfterViewInit{
   contractGroups: string[];

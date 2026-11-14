@@ -11,9 +11,10 @@ import { NurseInterface } from 'src/app/models/Nurse';
 import { CacheUtils } from 'src/app/utils/CacheUtils';
 
 @Component({
-  selector: 'app-nurse-history',
-  templateUrl: './nurse-history.component.html',
-  styleUrls: ['./nurse-history.component.css']
+    selector: 'app-nurse-history',
+    templateUrl: './nurse-history.component.html',
+    styleUrls: ['./nurse-history.component.css'],
+    standalone: false
 })
 export class NurseHistoryComponent  implements OnInit, OnChanges, OnDestroy{
   regex = WEIGHT_ALLOWED_INTEGERS

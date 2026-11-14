@@ -10,9 +10,10 @@ import { MatSort } from '@angular/material/sort';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-account-creation',
-  templateUrl: './account-creation.component.html',
-  styleUrls: ['./account-creation.component.css']
+    selector: 'app-account-creation',
+    templateUrl: './account-creation.component.html',
+    styleUrls: ['./account-creation.component.css'],
+    standalone: false
 })
 export class AccountCreationComponent implements OnInit{
   accounts: string[]

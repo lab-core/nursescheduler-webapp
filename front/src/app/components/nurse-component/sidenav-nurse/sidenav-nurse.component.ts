@@ -5,9 +5,10 @@ import { NURSE, NURSE_GROUP} from 'src/app/constants/app-routes';
 import { NURSE_MENU_BUTTONS } from 'src/app/constants/navButton';
 
 @Component({
-  selector: 'app-sidenav-nurse',
-  templateUrl: './sidenav-nurse.component.html',
-  styleUrls: ['./sidenav-nurse.component.css']
+    selector: 'app-sidenav-nurse',
+    templateUrl: './sidenav-nurse.component.html',
+    styleUrls: ['./sidenav-nurse.component.css'],
+    standalone: false
 })
 export class SidenavNurseComponent {  
   buttons: string[]

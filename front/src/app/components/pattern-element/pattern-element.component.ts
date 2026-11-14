@@ -5,9 +5,10 @@ import { PatternElement } from 'src/app/models/PatternElement';
 import { DateUtils } from 'src/app/utils/DateUtils';
 
 @Component({
-  selector: 'app-pattern-element',
-  templateUrl: './pattern-element.component.html',
-  styleUrls: ['./pattern-element.component.css']
+    selector: 'app-pattern-element',
+    templateUrl: './pattern-element.component.html',
+    styleUrls: ['./pattern-element.component.css'],
+    standalone: false
 })
 export class PatternElementComponent implements OnInit{
 

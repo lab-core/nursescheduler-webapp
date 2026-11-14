@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { CustomSelector } from "src/app/models/CustomSelector";
 
 @Component({
-  selector: "app-button-multiselect",
-  templateUrl: "./button-multiselect.component.html",
-  styleUrls: ["./button-multiselect.component.css"],
+    selector: "app-button-multiselect",
+    templateUrl: "./button-multiselect.component.html",
+    styleUrls: ["./button-multiselect.component.css"],
+    standalone: false
 })
 export class ButtonMultiselectComponent {
   @Input() elements!: string[];

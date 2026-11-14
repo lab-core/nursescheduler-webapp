@@ -7,9 +7,10 @@ import { ProfileService } from 'src/app/services/profile/profile.service';
 import { CreateEmptyProfileDialogComponent } from './create-empty-profile-dialog/create-empty-profile-dialog.component';
 
 @Component({
-  selector: 'app-create-profile-dialog',
-  templateUrl: './create-profile-dialog.component.html',
-  styleUrls: ['./create-profile-dialog.component.css']
+    selector: 'app-create-profile-dialog',
+    templateUrl: './create-profile-dialog.component.html',
+    styleUrls: ['./create-profile-dialog.component.css'],
+    standalone: false
 })
 export class CreateProfileDialogComponent {
 

@@ -22,9 +22,10 @@ import { CacheUtils } from 'src/app/utils/CacheUtils';
 
 
 @Component({
-  selector: 'app-import-profile-dialog',
-  templateUrl: './import-profile-dialog.component.html',
-  styleUrls: ['./import-profile-dialog.component.css']
+    selector: 'app-import-profile-dialog',
+    templateUrl: './import-profile-dialog.component.html',
+    styleUrls: ['./import-profile-dialog.component.css'],
+    standalone: false
 })
 export class ImportProfileComponent implements OnInit{
 

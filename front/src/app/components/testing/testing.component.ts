@@ -21,9 +21,10 @@ import { MinMaxConstraint } from 'src/app/models/MinMaxConstraint';
 import { UnwantedSkills } from "src/app/models/UnwantedSkills";
 
 @Component({
-  selector: "app-testing",
-  templateUrl: "./testing.component.html",
-  styleUrls: ["./testing.component.css"],
+    selector: "app-testing",
+    templateUrl: "./testing.component.html",
+    styleUrls: ["./testing.component.css"],
+    standalone: false
 })
 export class TestingComponent {
   weight = BASE_VALUE;

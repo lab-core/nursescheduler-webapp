@@ -9,9 +9,10 @@ import { Exception } from 'src/app/utils/Exception';
 import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-message-dialog.component';
 
 @Component({
-  selector: 'app-nurse-creation-dialog',
-  templateUrl: './nurse-creation-dialog.component.html',
-  styleUrls: ['./nurse-creation-dialog.component.css']
+    selector: 'app-nurse-creation-dialog',
+    templateUrl: './nurse-creation-dialog.component.html',
+    styleUrls: ['./nurse-creation-dialog.component.css'],
+    standalone: false
 })
 export class NurseCreationDialogComponent  implements OnInit{
   @Output() errorState: EventEmitter<boolean>;

@@ -8,9 +8,10 @@ import { Exception } from 'src/app/utils/Exception';
 import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-message-dialog.component';
 
 @Component({
-  selector: 'app-shift-type-creation-dialog',
-  templateUrl: './shift-type-creation-dialog.component.html',
-  styleUrls: ['./shift-type-creation-dialog.component.css']
+    selector: 'app-shift-type-creation-dialog',
+    templateUrl: './shift-type-creation-dialog.component.html',
+    styleUrls: ['./shift-type-creation-dialog.component.css'],
+    standalone: false
 })
 export class ShiftTypeCreationDialogComponent implements OnInit{
   @Output() errorState: EventEmitter<boolean> | undefined;

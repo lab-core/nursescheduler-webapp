@@ -26,9 +26,10 @@ interface PreferenceKeyInterface{
 }
 
 @Component({
-  selector: "app-consult-schedule",
-  templateUrl: "./consult-schedule.component.html",
-  styleUrls: ["./consult-schedule.component.css"],
+    selector: "app-consult-schedule",
+    templateUrl: "./consult-schedule.component.html",
+    styleUrls: ["./consult-schedule.component.css"],
+    standalone: false
 })
 export class ConsultScheduleComponent implements OnInit, OnDestroy, AfterViewInit {
 

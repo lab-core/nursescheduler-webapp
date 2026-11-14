@@ -4,9 +4,10 @@ import { PatternElement } from 'src/app/models/PatternElement';
 import { UnwantedPatterns } from 'src/app/models/UnwantedPatterns';
 
 @Component({
-  selector: 'app-unwanted-patterns',
-  templateUrl: './unwanted-patterns.component.html',
-  styleUrls: ['./unwanted-patterns.component.css']
+    selector: 'app-unwanted-patterns',
+    templateUrl: './unwanted-patterns.component.html',
+    styleUrls: ['./unwanted-patterns.component.css'],
+    standalone: false
 })
 export class UnwantedPatternsComponent implements OnInit {
 

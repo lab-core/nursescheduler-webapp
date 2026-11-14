@@ -6,9 +6,10 @@ import { LOGIN } from 'src/app/constants/app-routes';
 
 
 @Component({
-  selector: "app-error-message-dialog",
-  templateUrl: "./error-message-dialog.component.html",
-  styleUrls: ["./error-message-dialog.component.css"],
+    selector: "app-error-message-dialog",
+    templateUrl: "./error-message-dialog.component.html",
+    styleUrls: ["./error-message-dialog.component.css"],
+    standalone: false
 })
 export class ErrorMessageDialogComponent implements OnInit {
   constructor(

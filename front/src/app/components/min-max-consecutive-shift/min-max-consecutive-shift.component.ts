@@ -4,9 +4,10 @@ import { BASE_VALUE } from 'src/app/constants/constraints';
 import { MinMaxShiftConstraint } from 'src/app/models/MinMaxShiftConstraint';
 
 @Component({
-  selector: 'app-min-max-consecutive-shift',
-  templateUrl: './min-max-consecutive-shift.component.html',
-  styleUrls: ['./min-max-consecutive-shift.component.css']
+    selector: 'app-min-max-consecutive-shift',
+    templateUrl: './min-max-consecutive-shift.component.html',
+    styleUrls: ['./min-max-consecutive-shift.component.css'],
+    standalone: false
 })
 export class MinMaxConsecutiveShiftComponent implements OnInit{
 

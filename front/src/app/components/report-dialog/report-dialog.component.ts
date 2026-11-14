@@ -10,9 +10,10 @@ interface StatisticElement {
 
 }
 @Component({
-  selector: 'app-report-dialog',
-  templateUrl: './report-dialog.component.html',
-  styleUrls: ['./report-dialog.component.css']
+    selector: 'app-report-dialog',
+    templateUrl: './report-dialog.component.html',
+    styleUrls: ['./report-dialog.component.css'],
+    standalone: false
 })
 export class ReportDialogComponent implements OnInit{
   dataSource: MatTableDataSource<StatisticElement>;

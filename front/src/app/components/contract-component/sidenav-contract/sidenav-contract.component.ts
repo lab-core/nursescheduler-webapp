@@ -5,9 +5,10 @@ import { CONTRACTS, CONTRACT_GROUP} from 'src/app/constants/app-routes';
 import { CONTRACT_MENU_BUTTONS } from 'src/app/constants/navButton';
 
 @Component({
-  selector: 'app-sidenav-contract',
-  templateUrl: './sidenav-contract.component.html',
-  styleUrls: ['./sidenav-contract.component.css']
+    selector: 'app-sidenav-contract',
+    templateUrl: './sidenav-contract.component.html',
+    styleUrls: ['./sidenav-contract.component.css'],
+    standalone: false
 })
 export class SidenavContractComponent {
   buttons: string[]

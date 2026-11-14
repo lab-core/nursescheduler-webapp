@@ -23,9 +23,10 @@ export class CustomErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: "app-numeric-input",
-  templateUrl: "./numeric-input.component.html",
-  styleUrls: ["./numeric-input.component.css"],
+    selector: "app-numeric-input",
+    templateUrl: "./numeric-input.component.html",
+    styleUrls: ["./numeric-input.component.css"],
+    standalone: false
 })
 export class NumericInputComponent implements OnInit, OnChanges{
   @Input() value!: string;

@@ -11,8 +11,9 @@ import { DateUtils } from "src/app/utils/DateUtils";
 @Component({
     selector: 'app-nurse-preference',
     templateUrl: './nurse-preference.component.html',
-    styleUrls: ['./nurse-preference.component.css']
-  })
+    styleUrls: ['./nurse-preference.component.css'],
+    standalone: false
+})
   export class NursePreferenceComponent implements OnInit, OnChanges, OnDestroy{
   regex = WEIGHT_ALLOWED_INTEGERS
 

@@ -3,9 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { ShiftGroupInterface } from 'src/app/models/Shift';
 
 @Component({
-  selector: 'app-shift-group-creation',
-  templateUrl: './shift-group-creation.component.html',
-  styleUrls: ['./shift-group-creation.component.css']
+    selector: 'app-shift-group-creation',
+    templateUrl: './shift-group-creation.component.html',
+    styleUrls: ['./shift-group-creation.component.css'],
+    standalone: false
 })
 export class ShiftGroupCreationComponent implements OnInit, OnChanges{
   @Input() shiftGroup!: ShiftGroupInterface;

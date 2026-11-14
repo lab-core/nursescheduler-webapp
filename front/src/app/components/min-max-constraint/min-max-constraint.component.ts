@@ -3,9 +3,10 @@ import { BASE_VALUE } from "src/app/constants/constraints";
 import { MinMaxConstraint } from "src/app/models/MinMaxConstraint";
 
 @Component({
-  selector: "app-min-max-constraint",
-  templateUrl: "./min-max-constraint.component.html",
-  styleUrls: ["./min-max-constraint.component.css"],
+    selector: "app-min-max-constraint",
+    templateUrl: "./min-max-constraint.component.html",
+    styleUrls: ["./min-max-constraint.component.css"],
+    standalone: false
 })
 export class MinMaxConstraintComponent implements OnInit{
   @Input() constraint!: MinMaxConstraint;

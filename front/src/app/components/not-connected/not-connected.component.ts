@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { LOGIN } from 'src/app/constants/app-routes';
 
 @Component({
-  selector: 'app-not-connected',
-  templateUrl: './not-connected.component.html',
-  styleUrls: ['./not-connected.component.css']
+    selector: 'app-not-connected',
+    templateUrl: './not-connected.component.html',
+    styleUrls: ['./not-connected.component.css'],
+    standalone: false
 })
 export class NotConnectedComponent {
 

@@ -3,9 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { ContractGroupInterface } from 'src/app/models/Contract';
 
 @Component({
-  selector: 'app-contract-group-creation',
-  templateUrl: './contract-group-creation.component.html',
-  styleUrls: ['./contract-group-creation.component.css']
+    selector: 'app-contract-group-creation',
+    templateUrl: './contract-group-creation.component.html',
+    styleUrls: ['./contract-group-creation.component.css'],
+    standalone: false
 })
 
 export class ContractGroupCreationComponent implements OnInit {

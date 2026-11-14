@@ -10,9 +10,10 @@ import { CacheUtils } from 'src/app/utils/CacheUtils';
 import { ErrorMessageDialogComponent } from '../error-message-dialog/error-message-dialog.component';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    standalone: false
 })
 export class LoginComponent {
   username: string;

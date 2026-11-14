@@ -7,9 +7,10 @@ import { Exception } from 'src/app/utils/Exception';
 import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-message-dialog.component';
 
 @Component({
-  selector: 'app-shift-creation-dialog',
-  templateUrl: './shift-creation-dialog.component.html',
-  styleUrls: ['./shift-creation-dialog.component.css']
+    selector: 'app-shift-creation-dialog',
+    templateUrl: './shift-creation-dialog.component.html',
+    styleUrls: ['./shift-creation-dialog.component.css'],
+    standalone: false
 })
 export class ShiftCreationDialogComponent{
 

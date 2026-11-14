@@ -8,9 +8,10 @@ import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-me
 import { ALLOWED_PROFILE_NAMES } from 'src/app/constants/regex';
 
 @Component({
-  selector: 'app-duplicate-profile',
-  templateUrl: './duplicate-profile.component.html',
-  styleUrls: ['./duplicate-profile.component.css']
+    selector: 'app-duplicate-profile',
+    templateUrl: './duplicate-profile.component.html',
+    styleUrls: ['./duplicate-profile.component.css'],
+    standalone: false
 })
 export class DuplicateProfileComponent {
 

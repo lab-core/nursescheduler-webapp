@@ -10,9 +10,10 @@ import { Exception } from 'src/app/utils/Exception';
 import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-message-dialog.component';
 
 @Component({
-  selector: 'app-nurse-group-creation-dialog',
-  templateUrl: './nurse-group-creation-dialog.component.html',
-  styleUrls: ['./nurse-group-creation-dialog.component.css']
+    selector: 'app-nurse-group-creation-dialog',
+    templateUrl: './nurse-group-creation-dialog.component.html',
+    styleUrls: ['./nurse-group-creation-dialog.component.css'],
+    standalone: false
 })
 export class NurseGroupCreationDialogComponent implements OnInit {
   @Output() errorState: EventEmitter<boolean>;

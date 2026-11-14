@@ -11,9 +11,10 @@ import { Exception } from 'src/app/utils/Exception';
 import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-message-dialog.component';
 
 @Component({
-  selector: 'app-contract-creation-dialog',
-  templateUrl: './contract-creation-dialog.component.html',
-  styleUrls: ['./contract-creation-dialog.component.css']
+    selector: 'app-contract-creation-dialog',
+    templateUrl: './contract-creation-dialog.component.html',
+    styleUrls: ['./contract-creation-dialog.component.css'],
+    standalone: false
 })
 export class ContractCreationDialogComponent implements OnInit{
 

@@ -3,9 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { NurseGroupInterface } from 'src/app/models/Nurse';
 
 @Component({
-  selector: 'app-nurse-group-creation',
-  templateUrl: './nurse-group-creation.component.html',
-  styleUrls: ['./nurse-group-creation.component.css']
+    selector: 'app-nurse-group-creation',
+    templateUrl: './nurse-group-creation.component.html',
+    styleUrls: ['./nurse-group-creation.component.css'],
+    standalone: false
 })
 export class NurseGroupCreationComponent implements OnInit, OnChanges {
   @Input() nurseGroup!: NurseGroupInterface;

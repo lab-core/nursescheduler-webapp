@@ -4,9 +4,10 @@ import { BASE_VALUE } from 'src/app/constants/constraints';
 import { UnwantedSkills } from 'src/app/models/UnwantedSkills';
 
 @Component({
-  selector: 'app-unwanted-skills',
-  templateUrl: './unwanted-skills.component.html',
-  styleUrls: ['./unwanted-skills.component.css']
+    selector: 'app-unwanted-skills',
+    templateUrl: './unwanted-skills.component.html',
+    styleUrls: ['./unwanted-skills.component.css'],
+    standalone: false
 })
 export class UnwantedSkillsComponent implements OnInit{
 

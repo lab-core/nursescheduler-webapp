@@ -6,9 +6,10 @@ import { ShiftInterface } from 'src/app/models/Shift';
 import { Exception } from 'src/app/utils/Exception';
 
 @Component({
-  selector: 'app-shift-creation',
-  templateUrl: './shift-creation.component.html',
-  styleUrls: ['./shift-creation.component.css']
+    selector: 'app-shift-creation',
+    templateUrl: './shift-creation.component.html',
+    styleUrls: ['./shift-creation.component.css'],
+    standalone: false
 })
 export class ShiftCreationComponent implements OnInit{
   @Input() shift!: ShiftInterface;

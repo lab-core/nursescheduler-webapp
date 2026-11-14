@@ -11,9 +11,10 @@ import { ProfileService } from 'src/app/services/profile/profile.service';
 import { AccountService } from 'src/app/services/account/account.service';
 
 @Component({
-  selector: 'app-share-profile',
-  templateUrl: './share-profile.component.html',
-  styleUrls: ['./share-profile.component.css']
+    selector: 'app-share-profile',
+    templateUrl: './share-profile.component.html',
+    styleUrls: ['./share-profile.component.css'],
+    standalone: false
 })
 export class ShareProfileComponent implements OnInit {
 

@@ -15,9 +15,10 @@ import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmat
 
 
 @Component({
-  selector: 'app-shifts-view',
-  templateUrl: './shifts-view.component.html',
-  styleUrls: ['./shifts-view.component.css']
+    selector: 'app-shifts-view',
+    templateUrl: './shifts-view.component.html',
+    styleUrls: ['./shifts-view.component.css'],
+    standalone: false
 })
 export class ShiftsViewComponent implements OnInit, AfterViewInit {
   

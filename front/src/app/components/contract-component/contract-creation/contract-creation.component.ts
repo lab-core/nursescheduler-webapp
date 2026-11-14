@@ -12,9 +12,10 @@ import { UnwantedPatterns } from "src/app/models/UnwantedPatterns";
 import { UnwantedSkills } from "src/app/models/UnwantedSkills";
 
 @Component({
-  selector: "app-contract-creation",
-  templateUrl: "./contract-creation.component.html",
-  styleUrls: ["./contract-creation.component.css"],
+    selector: "app-contract-creation",
+    templateUrl: "./contract-creation.component.html",
+    styleUrls: ["./contract-creation.component.css"],
+    standalone: false
 })
 export class ContractCreationComponent implements OnInit{
 

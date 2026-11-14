@@ -8,9 +8,10 @@ import { AccountService } from 'src/app/services/account/account.service';
 
 
 @Component({
-  selector: 'app-account-creation-dialog',
-  templateUrl: './account-creation-dialog.component.html',
-  styleUrls: ['./account-creation-dialog.component.css']
+    selector: 'app-account-creation-dialog',
+    templateUrl: './account-creation-dialog.component.html',
+    styleUrls: ['./account-creation-dialog.component.css'],
+    standalone: false
 })
 export class AccountCreationDialogComponent {
 

@@ -9,9 +9,10 @@ import { ErrorMessageDialogComponent } from '../../error-message-dialog/error-me
 import { ALLOWED_PROFILE_NAMES } from 'src/app/constants/regex';
 
 @Component({
-  selector: 'app-create-empty-profile-dialog',
-  templateUrl: './create-empty-profile-dialog.component.html',
-  styleUrls: ['./create-empty-profile-dialog.component.css']
+    selector: 'app-create-empty-profile-dialog',
+    templateUrl: './create-empty-profile-dialog.component.html',
+    styleUrls: ['./create-empty-profile-dialog.component.css'],
+    standalone: false
 })
 export class CreateEmptyProfileDialogComponent {
 

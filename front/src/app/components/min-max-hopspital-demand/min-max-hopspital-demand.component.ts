@@ -5,9 +5,10 @@ import { SkillDemandInterface } from 'src/app/models/hospital-demand';
 
 
 @Component({
-  selector: 'app-min-max-hopspital-demand',
-  templateUrl: './min-max-hopspital-demand.component.html',
-  styleUrls: ['./min-max-hopspital-demand.component.css']
+    selector: 'app-min-max-hopspital-demand',
+    templateUrl: './min-max-hopspital-demand.component.html',
+    styleUrls: ['./min-max-hopspital-demand.component.css'],
+    standalone: false
 })
 export class MinMaxHopspitalDemandComponent implements OnInit{
   @Input() demand!: SkillDemandInterface;

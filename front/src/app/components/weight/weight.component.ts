@@ -27,9 +27,10 @@ export class CustomErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: "app-weight",
-  templateUrl: "./weight.component.html",
-  styleUrls: ["./weight.component.css"],
+    selector: "app-weight",
+    templateUrl: "./weight.component.html",
+    styleUrls: ["./weight.component.css"],
+    standalone: false
 })
 export class WeightComponent implements OnInit, OnChanges{
   @Input() weight!: string;
